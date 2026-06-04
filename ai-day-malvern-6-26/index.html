@@ -770,6 +770,33 @@
       font-size: 13px;
     }
 
+    .bottom-download {
+      margin-top: 28px;
+      border: 1px solid var(--cp-border);
+      border-radius: 28px;
+      background: var(--cp-panel-strong);
+      box-shadow: var(--cp-shadow);
+      padding: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .bottom-download h2 {
+      margin-bottom: 8px;
+    }
+
+    .bottom-download p {
+      color: var(--cp-text-muted);
+      margin: 0;
+      max-width: 680px;
+    }
+
+    .bottom-download .btn {
+      flex: 0 0 auto;
+    }
+
     .hidden {
       display: none !important;
     }
@@ -783,6 +810,11 @@
       .lane-grid,
       .resource-grid {
         grid-template-columns: 1fr;
+      }
+
+      .bottom-download {
+        align-items: stretch;
+        flex-direction: column;
       }
 
       .section-head {
@@ -1187,6 +1219,15 @@
           <span>Use the Word form to fill out Phase 1, Phase 2, and Phase 3 offline or on paper.</span>
         </a>
       </div>
+    </section>
+
+    <section id="participant-form-download" class="bottom-download">
+      <div>
+        <div class="eyebrow">Participant form</div>
+        <h2>Prefer paper first?</h2>
+        <p>Download the Word form and fill out Phase 1, Phase 2, and Phase 3 before transferring your answers into the live canvas.</p>
+      </div>
+      <a class="btn primary" href="assets/ai-day-malvern-6-26-participant-form.docx" download>Download Word form</a>
     </section>
   </main>
 
