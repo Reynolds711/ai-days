@@ -1,0 +1,1866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Day Malvern 6-26</title>
+  <script>
+    (() => {
+      const param = new URLSearchParams(window.location.search).get("clawpilotTheme");
+      const theme =
+        param || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      document.documentElement.setAttribute("data-theme", theme);
+    })();
+  </script>
+  <style>
+    :root {
+      color-scheme: light;
+      --cp-bg: #f7f4ef;
+      --cp-bg-elevated: #fcfbf8;
+      --cp-surface: #ffffff;
+      --cp-surface-soft: #f5f5f5;
+      --cp-border: #dedede;
+      --cp-border-strong: #919191;
+      --cp-text: #242424;
+      --cp-text-muted: #5c5c5c;
+      --cp-text-soft: #6f6f6f;
+      --cp-accent: #b11f4b;
+      --cp-accent-hover: #9a1a41;
+      --cp-accent-soft: rgba(177, 31, 75, 0.08);
+      --cp-accent-fg: #ffffff;
+      --cp-success: #16a34a;
+      --cp-danger: #dc2626;
+      --cp-warning: #f59e0b;
+      --cp-link: #0078d4;
+      --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.12);
+      --cp-overlay: rgba(255, 255, 255, 0.8);
+      --cp-panel: rgba(255, 255, 255, 0.86);
+      --cp-panel-strong: rgba(255, 255, 255, 0.96);
+      --cp-sheen: rgba(255, 255, 255, 0.55);
+      --cp-highlight: rgba(177, 31, 75, 0.12);
+    }
+    html[data-theme="dark"] {
+      color-scheme: dark;
+      --cp-bg: #3d3b3a;
+      --cp-bg-elevated: #343231;
+      --cp-surface: #292929;
+      --cp-surface-soft: #2e2e2e;
+      --cp-border: #474747;
+      --cp-border-strong: #5f5f5f;
+      --cp-text: #dedede;
+      --cp-text-muted: #919191;
+      --cp-text-soft: #b0b0b0;
+      --cp-accent: #fd8ea1;
+      --cp-accent-hover: #fb7b91;
+      --cp-accent-soft: rgba(253, 142, 161, 0.14);
+      --cp-accent-fg: #1a1a1a;
+      --cp-success: #4ade80;
+      --cp-danger: #f87171;
+      --cp-warning: #fbbf24;
+      --cp-link: #4da6ff;
+      --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.32);
+      --cp-overlay: rgba(41, 41, 41, 0.88);
+      --cp-panel: rgba(41, 41, 41, 0.72);
+      --cp-panel-strong: rgba(41, 41, 41, 0.96);
+      --cp-sheen: rgba(255, 255, 255, 0.04);
+      --cp-highlight: rgba(253, 142, 161, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at top right, var(--cp-highlight), transparent 32rem),
+        var(--cp-bg);
+      color: var(--cp-text);
+      font-family: "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif;
+      line-height: 1.5;
+    }
+
+    a {
+      color: var(--cp-link);
+    }
+
+    button,
+    input,
+    textarea,
+    select {
+      font: inherit;
+    }
+
+    .shell {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .hero {
+      min-height: 520px;
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
+      gap: 24px;
+      align-items: stretch;
+      padding: 28px 0 20px;
+    }
+
+    .hero-panel,
+    .control-panel,
+    .card,
+    .canvas-panel,
+    .output-panel,
+    .sticky-nav {
+      background: var(--cp-panel-strong);
+      border: 1px solid var(--cp-border);
+      border-radius: 16px;
+      box-shadow: 0 0 2px var(--cp-border), 0 1px 2px var(--cp-border);
+    }
+
+    .hero-panel {
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .hero-panel::after {
+      content: "Agency";
+      position: absolute;
+      right: -20px;
+      bottom: -44px;
+      font-size: clamp(72px, 15vw, 180px);
+      font-weight: 800;
+      line-height: 1;
+      color: var(--cp-accent-soft);
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      color: var(--cp-text-muted);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0;
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+    }
+
+    h1 {
+      font-size: clamp(48px, 8vw, 92px);
+      max-width: 780px;
+      margin-top: 28px;
+    }
+
+    .hero-subtitle {
+      max-width: 720px;
+      margin: 24px 0 0;
+      color: var(--cp-text-muted);
+      font-size: 20px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 36px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .btn {
+      border: 1px solid var(--cp-border);
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      border-radius: 0.625rem;
+      padding: 10px 14px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: transform 0.16s ease, border-color 0.16s ease, background 0.16s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      border-color: var(--cp-border-strong);
+    }
+
+    .btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.55;
+      transform: none;
+    }
+
+    .btn.primary {
+      background: var(--cp-accent);
+      border-color: var(--cp-accent);
+      color: var(--cp-accent-fg);
+    }
+
+    .btn.ghost {
+      background: transparent;
+    }
+
+    .control-panel {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .sector-tabs {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .sector-tab {
+      border: 1px solid var(--cp-border);
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      border-radius: 16px;
+      padding: 14px;
+      text-align: left;
+      cursor: pointer;
+      transition: border-color 0.16s ease, background 0.16s ease, transform 0.16s ease;
+    }
+
+    .sector-tab:hover {
+      transform: translateY(-1px);
+      border-color: var(--cp-border-strong);
+    }
+
+    .sector-tab.active {
+      border-color: var(--cp-accent);
+      background: var(--cp-accent-soft);
+    }
+
+    .sector-tab strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 15px;
+    }
+
+    .sector-tab span {
+      display: block;
+      color: var(--cp-text-muted);
+      font-size: 13px;
+    }
+
+    .quick-status {
+      display: grid;
+      gap: 10px;
+      padding-top: 10px;
+      border-top: 1px solid var(--cp-border);
+    }
+
+    .status-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 13px;
+    }
+
+    .status-row span:first-child {
+      color: var(--cp-text-muted);
+    }
+
+    .status-row span:last-child {
+      font-weight: 700;
+    }
+
+    .sticky-nav {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px;
+      margin: 0 0 24px;
+      backdrop-filter: blur(12px);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      color: var(--cp-text-muted);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 8px 10px;
+      border-radius: 0.625rem;
+    }
+
+    .nav-links a:hover {
+      background: var(--cp-accent-soft);
+      color: var(--cp-text);
+    }
+
+    section {
+      margin: 24px 0;
+      scroll-margin-top: 88px;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      align-items: end;
+      margin: 0 0 16px;
+    }
+
+    .section-head h2 {
+      font-size: clamp(28px, 4vw, 46px);
+      max-width: 720px;
+    }
+
+    .section-head p {
+      max-width: 460px;
+      color: var(--cp-text-muted);
+      margin: 0;
+    }
+
+    .three-acts {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      padding: 22px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 4px;
+      background: var(--cp-accent);
+    }
+
+    .act-number {
+      color: var(--cp-accent);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+
+    .card h3 {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+
+    .card p {
+      color: var(--cp-text-muted);
+      margin: 0;
+      font-size: 14px;
+    }
+
+    .demo-chip {
+      display: inline-flex;
+      margin-top: 16px;
+      padding: 6px 9px;
+      border: 1px solid var(--cp-border);
+      border-radius: 0.625rem;
+      background: var(--cp-surface-soft);
+      color: var(--cp-text-muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .lane-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .mini-card {
+      padding: 16px;
+      border: 1px solid var(--cp-border);
+      border-radius: 16px;
+      background: var(--cp-surface);
+    }
+
+    .mini-card strong {
+      display: block;
+      margin-bottom: 7px;
+    }
+
+    .mini-card span {
+      color: var(--cp-text-muted);
+      font-size: 13px;
+    }
+
+    .recipe-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .recipe {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      align-items: center;
+      border: 1px solid var(--cp-border);
+      border-radius: 16px;
+      padding: 16px;
+      background: var(--cp-surface);
+      cursor: pointer;
+    }
+
+    .recipe.active {
+      border-color: var(--cp-accent);
+      background: var(--cp-accent-soft);
+    }
+
+    .recipe h3 {
+      font-size: 19px;
+      margin-bottom: 4px;
+    }
+
+    .recipe p {
+      margin: 0;
+      color: var(--cp-text-muted);
+      font-size: 13px;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .tag {
+      border: 1px solid var(--cp-border);
+      border-radius: 999px;
+      padding: 4px 8px;
+      color: var(--cp-text-muted);
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .layout-two {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(360px, 0.85fr);
+      gap: 18px;
+      align-items: start;
+    }
+
+    .canvas-panel,
+    .output-panel {
+      padding: 22px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .field {
+      display: grid;
+      gap: 6px;
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      color: var(--cp-text-muted);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      border: 1px solid var(--cp-border);
+      border-radius: 0.625rem;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      padding: 10px 11px;
+      outline: none;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      border-color: var(--cp-accent);
+      box-shadow: 0 0 0 3px var(--cp-accent-soft);
+    }
+
+    textarea {
+      min-height: 84px;
+      resize: vertical;
+    }
+
+    .persona-dashboard {
+      display: grid;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .persona-card {
+      border: 1px solid var(--cp-border);
+      border-radius: 16px;
+      background: var(--cp-surface);
+      padding: 14px;
+    }
+
+    .persona-card h4 {
+      margin: 0 0 8px;
+      font-size: 14px;
+    }
+
+    .persona-card p {
+      color: var(--cp-text-muted);
+      margin: 0;
+      font-size: 13px;
+    }
+
+    .architecture {
+      display: grid;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .layer {
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      gap: 10px;
+      align-items: center;
+      border: 1px solid var(--cp-border);
+      border-radius: 0.625rem;
+      padding: 10px;
+      background: var(--cp-surface-soft);
+      font-size: 13px;
+    }
+
+    .layer strong {
+      color: var(--cp-text);
+    }
+
+    .layer span {
+      color: var(--cp-text-muted);
+    }
+
+    .prompt-box {
+      margin-top: 16px;
+      border: 1px solid var(--cp-border);
+      border-radius: 16px;
+      background: var(--cp-bg-elevated);
+      padding: 14px;
+      color: var(--cp-text-soft);
+      font-family: Consolas, "Courier New", Courier, monospace;
+      font-size: 12px;
+      white-space: pre-wrap;
+      max-height: 260px;
+      overflow: auto;
+    }
+
+    .submission-note {
+      margin-top: 12px;
+      border: 1px solid var(--cp-border);
+      border-radius: 16px;
+      background: var(--cp-accent-soft);
+      color: var(--cp-text-muted);
+      padding: 12px 14px;
+      font-size: 13px;
+    }
+
+    .stage-rail {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .stage-step {
+      border: 1px solid var(--cp-border);
+      border-radius: 16px;
+      background: var(--cp-surface);
+      color: var(--cp-text-muted);
+      padding: 14px;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .stage-step strong {
+      display: block;
+      color: var(--cp-text);
+      margin-bottom: 4px;
+    }
+
+    .stage-step.active {
+      border-color: var(--cp-accent);
+      background: var(--cp-accent-soft);
+    }
+
+    .stage-step.locked {
+      cursor: not-allowed;
+      opacity: 0.55;
+    }
+
+    .stage-section.locked,
+    .stage-section.inactive {
+      display: none;
+    }
+
+    .kit-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    .kit-card {
+      border: 1px solid var(--cp-border);
+      border-radius: 16px;
+      background: var(--cp-surface);
+      padding: 18px;
+    }
+
+    .kit-card h3 {
+      font-size: 18px;
+      margin-bottom: 8px;
+    }
+
+    .kit-card p,
+    .kit-card li {
+      color: var(--cp-text-muted);
+      font-size: 13px;
+    }
+
+    .kit-card ul {
+      margin: 10px 0 0;
+      padding-left: 18px;
+    }
+
+    .path-grid,
+    .task-capture-grid,
+    .candidate-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .path-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .path-card {
+      border: 1px solid var(--cp-border);
+      border-radius: 16px;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      padding: 18px;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .path-card.active {
+      border-color: var(--cp-accent);
+      background: var(--cp-accent-soft);
+    }
+
+    .path-card strong {
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .path-card span {
+      display: block;
+      color: var(--cp-text-muted);
+      font-size: 13px;
+    }
+
+    .task-capture-grid {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    }
+
+    .candidate {
+      border: 1px solid var(--cp-border);
+      border-radius: 16px;
+      padding: 14px;
+      background: var(--cp-surface);
+      display: grid;
+      gap: 8px;
+    }
+
+    .candidate-top {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .candidate-top strong {
+      font-size: 14px;
+    }
+
+    .candidate-top button {
+      border: 1px solid var(--cp-border);
+      background: var(--cp-surface-soft);
+      color: var(--cp-text);
+      border-radius: 0.625rem;
+      padding: 5px 8px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .resource-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .resource {
+      border: 1px solid var(--cp-border);
+      border-radius: 16px;
+      background: var(--cp-surface);
+      padding: 18px;
+      text-decoration: none;
+      color: var(--cp-text);
+    }
+
+    .resource:hover {
+      border-color: var(--cp-accent);
+    }
+
+    .resource strong {
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .resource span {
+      color: var(--cp-text-muted);
+      font-size: 13px;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    @media (max-width: 920px) {
+      .hero,
+      .layout-two,
+      .three-acts,
+      .stage-rail,
+      .kit-grid,
+      .lane-grid,
+      .resource-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .section-head {
+        display: block;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .sticky-nav {
+        position: static;
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="hero">
+      <div class="hero-panel">
+        <div>
+          <div class="eyebrow">AI Day Malvern 6-26</div>
+          <h1>Design one agent pilot. Submit the brief.</h1>
+          <p class="hero-subtitle">
+            A live workshop cockpit for State &amp; Local Government, Higher Education, and Academic Medical Center teams.
+            Choose a lane, capture your outcome, and submit a design brief Josh can use after the session.
+          </p>
+          <div class="hero-actions">
+            <a class="btn primary" href="#acts">Start with Delegate</a>
+            <a class="btn" href="#stage-control">See session stages</a>
+            <a class="btn ghost" href="https://reynolds711.github.io/periodic-table-of-agents/" target="_blank" rel="noreferrer">Open Periodic Table</a>
+          </div>
+        </div>
+      </div>
+
+      <aside class="control-panel" aria-label="Sector controls">
+        <div>
+          <div class="eyebrow">Choose your group</div>
+          <div class="sector-tabs" id="sectorTabs"></div>
+        </div>
+        <div class="quick-status">
+          <div class="status-row"><span>Session frame</span><span>Delegate / Triage / Permeate</span></div>
+          <div class="status-row"><span>Current sector</span><span id="statusSector">Higher Education</span></div>
+          <div class="status-row"><span>Path</span><span id="statusPath">Blueprint Path</span></div>
+          <div class="status-row"><span>Reference recipe</span><span id="statusRecipe">None selected</span></div>
+          <div class="status-row"><span>Artifact output</span><span>Email-ready design brief</span></div>
+        </div>
+      </aside>
+    </header>
+
+    <nav class="sticky-nav">
+      <strong>Live flow</strong>
+      <div class="nav-links">
+        <a href="#stage-control">Stage control</a>
+        <a href="#acts">Delegate</a>
+        <a href="#stage-control">Triage</a>
+        <a href="#stage-control">Permeate</a>
+      </div>
+    </nav>
+
+    <div class="stage-rail" id="stage-control">
+      <button class="stage-step active" data-stage-button="delegate" onclick="setStage('delegate')">
+        <strong>1. Delegate</strong>
+        Find the bounded task.
+      </button>
+      <button class="stage-step locked" data-stage-button="triage" onclick="setStage('triage')">
+        <strong>2. Triage</strong>
+        Choose the pilot.
+      </button>
+      <button class="stage-step locked" data-stage-button="permeate" onclick="setStage('permeate')">
+        <strong>3. Permeate</strong>
+        Design the operating model.
+      </button>
+    </div>
+
+    <section id="acts" class="stage-section" data-stage="delegate">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Stage 1: Delegation Kit</div>
+          <h2>Find the avocado.</h2>
+        </div>
+        <p>Name the bounded task before you name the tool. This stage should produce one clear delegation candidate.</p>
+      </div>
+      <div class="three-acts">
+        <article class="card">
+          <div class="act-number">Act I</div>
+          <h3>Delegate: find your avocado</h3>
+          <p>What repeatable, bounded work keeps showing up and could be handed off if the instructions and constraints were clear?</p>
+          <span class="demo-chip">Demo 1: web declarative agent</span>
+        </article>
+      </div>
+      <div class="kit-grid">
+        <article class="kit-card">
+          <h3>Good first-agent checklist</h3>
+          <ul>
+            <li>Repeated often</li>
+            <li>Source material exists</li>
+            <li>Human review is possible</li>
+            <li>Low risk if scoped narrowly</li>
+            <li>Success can be measured</li>
+          </ul>
+        </article>
+        <article class="kit-card">
+          <h3>Task sorter</h3>
+          <p>Sort the work into three buckets: human-led, human plus AI, and AI-prepared for review.</p>
+        </article>
+        <article class="kit-card">
+          <h3>Decision prompt</h3>
+          <p>What task keeps showing up every week and could be handed off if the instructions were clear?</p>
+        </article>
+      </div>
+      <div class="card" style="margin-top: 16px;">
+        <div class="act-number">Access path</div>
+        <h3>Which path are you on today?</h3>
+        <p>Select the path your table can use. Both paths capture the same design thinking.</p>
+        <div class="path-grid">
+          <button class="path-card" data-path="builder" onclick="setAccessPath('builder')">
+            <strong>Build Path</strong>
+            <span>We have Microsoft 365 Copilot and Agent Builder enabled. We can build live and submit the brief.</span>
+          </button>
+          <button class="path-card active" data-path="blueprint" onclick="setAccessPath('blueprint')">
+            <strong>Blueprint Path</strong>
+            <span>We have Copilot Chat only, no builder access, or we are not sure. We will design and submit a build-ready brief.</span>
+          </button>
+        </div>
+        <div class="submission-note" id="pathGuidance">Blueprint Path: capture the role, grounding, questions, handoff, and process. Josh can build from the submitted brief.</div>
+      </div>
+      <div class="card" style="margin-top: 16px;">
+        <div class="act-number">Delegation capture</div>
+        <h3>List candidate tasks before choosing one.</h3>
+        <p>Capture several tasks your organization could delegate to an AI agent. You will promote one into the Triage stage.</p>
+        <div class="task-capture-grid">
+          <div class="field">
+            <label for="candidateTask">Candidate task</label>
+            <input id="candidateTask" placeholder="Example: Route resident requests to the right department" />
+          </div>
+          <div class="field">
+            <label for="candidateOwner">Who does this today?</label>
+            <input id="candidateOwner" placeholder="Example: Case intake specialist, advisor, coordinator" />
+          </div>
+          <div class="field full">
+            <label for="candidateGrounding">What content or knowledge source grounds it?</label>
+            <textarea id="candidateGrounding" placeholder="Example: Policy manual, service catalog, FAQ, forms, agency directory"></textarea>
+          </div>
+        </div>
+        <div class="hero-actions">
+          <button class="btn primary" onclick="addCandidateTask()">Add candidate task</button>
+        </div>
+        <div class="candidate-list" id="candidateList"></div>
+      </div>
+      <div class="hero-actions">
+        <button class="btn primary" onclick="advanceStage('triage')">Continue to Triage</button>
+      </div>
+    </section>
+
+    <section id="recipes" class="stage-section locked" data-stage="triage">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Stage 2: Triage Kit</div>
+          <h2 id="recipeHeading">Higher Education starting points</h2>
+        </div>
+        <p id="recipeSubhead">Use these as inspiration only. Selecting one updates gray example text, but the canvas stays blank.</p>
+      </div>
+      <div class="kit-grid">
+        <article class="kit-card">
+          <h3>Prioritization rubric</h3>
+          <ul>
+            <li>Value: does it matter?</li>
+            <li>Feasibility: can we ground it?</li>
+            <li>Adoption: will people use it?</li>
+            <li>Safety: can we review it?</li>
+            <li>Scale: can the pattern repeat?</li>
+          </ul>
+        </article>
+        <article class="kit-card">
+          <h3>Sector recipes</h3>
+          <p>Use the recipe cards below as examples. Do not copy them unless they match your real outcome.</p>
+        </article>
+        <article class="kit-card">
+          <h3>Decision prompt</h3>
+          <p>Which agent pilot has the clearest outcome, user, grounding source, and review point?</p>
+        </article>
+        <article class="kit-card">
+          <h3>Handoff rule</h3>
+          <p>A safe agent knows when to stop. Name the requests it can prepare, the ones it can clarify, and the ones it must route to a person.</p>
+        </article>
+        <article class="kit-card">
+          <h3>Constraint pattern</h3>
+          <p>The agent can summarize, classify, draft, and recommend. It cannot approve, determine eligibility, make clinical judgments, or send without review.</p>
+        </article>
+        <article class="kit-card">
+          <h3>Test pattern</h3>
+          <p>Test a normal request, an ambiguous request, an overreach request, and an urgent request.</p>
+        </article>
+      </div>
+      <div class="layout-two">
+        <div class="recipe-list" id="recipeList"></div>
+        <aside class="card">
+          <div class="act-number">Periodic table lens</div>
+          <h3 id="ptLensTitle">Start with the student journey</h3>
+          <p id="ptLensBody">Use the table to locate the domain, maturity level, backbone systems, and trust layer before you build.</p>
+          <div class="tags" id="ptLensTags"></div>
+          <div class="hero-actions">
+            <button class="btn primary" onclick="openSectorTable()">Open sector table</button>
+          </div>
+        </aside>
+      </div>
+      <div class="card" style="margin-top: 16px;">
+        <div class="act-number">Promoted task</div>
+        <h3>Refine the task you promoted.</h3>
+        <p>These fields are auto-filled from Delegate, but you can edit them before moving into the Triage Workbench.</p>
+        <div class="form-grid" style="margin-top: 16px;">
+          <div class="field full">
+            <label for="promotedTask">Promoted task</label>
+            <input id="promotedTask" placeholder="Promote a task from Delegate, or type one here" />
+          </div>
+          <div class="field">
+            <label for="promotedOwner">Current owner or persona</label>
+            <input id="promotedOwner" placeholder="Example: Case intake specialist, advisor, coordinator" />
+          </div>
+          <div class="field">
+            <label for="promotedGrounding">Content or knowledge source</label>
+            <input id="promotedGrounding" placeholder="Example: Service catalog, LMS, policy manual, FAQ" />
+          </div>
+        </div>
+        <div class="hero-actions">
+          <button class="btn primary" onclick="applyPromotedTaskEdits()">Apply promoted task edits</button>
+        </div>
+      </div>
+      <div class="card" style="margin-top: 16px;">
+        <div class="act-number">Triage workbench</div>
+        <h3>Teach the agent what to recognize and when to hand off.</h3>
+        <p>This is the safety layer between a grounded helper and a useful operational agent.</p>
+        <div class="form-grid" style="margin-top: 16px;">
+          <div class="field full">
+            <label for="triageIntents">End-user intents</label>
+            <textarea id="triageIntents" placeholder="Example: find the right service, check application status, understand missing documents, ask for urgent help"></textarea>
+          </div>
+          <div class="field full">
+            <label for="triageQuestions">Anticipated questions</label>
+            <textarea id="triageQuestions" placeholder="Example: Where do I start? What program applies? What information is missing? What happens next?"></textarea>
+          </div>
+          <div class="field full">
+            <label for="clarifyingQuestions">Clarifying questions the agent should ask</label>
+            <textarea id="clarifyingQuestions" placeholder="Example: What type of support do you need? Have you already applied? What deadline or urgency applies?"></textarea>
+          </div>
+          <div class="field">
+            <label for="triageCategories">Triage categories</label>
+            <input id="triageCategories" placeholder="Example: routine, missing information, urgent, outside scope, human review required" />
+          </div>
+          <div class="field">
+            <label for="handoffTriggers">Human handoff triggers</label>
+            <input id="handoffTriggers" placeholder="Example: eligibility decision, legal issue, safety risk, complaint, exception request" />
+          </div>
+          <div class="field full">
+            <label for="escalationMessage">Escalation message</label>
+            <textarea id="escalationMessage" placeholder="Example: I can help prepare the information, but this requires human review. Here is what I can summarize before routing it."></textarea>
+          </div>
+          <div class="field full">
+            <label for="testCases">Test cases</label>
+            <textarea id="testCases" placeholder="Example: normal question, ambiguous question, overreach question, urgent request"></textarea>
+          </div>
+        </div>
+        <div class="hero-actions">
+          <button class="btn primary" onclick="applyTriageWorkbench()">Apply triage to canvas</button>
+        </div>
+      </div>
+      <div class="hero-actions">
+        <button class="btn" onclick="setStage('delegate')">Back to Delegate</button>
+        <button class="btn primary" onclick="advanceStage('permeate')">Continue to Permeate</button>
+      </div>
+    </section>
+
+    <section id="canvas" class="stage-section locked" data-stage="permeate">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Stage 3: Agency Kit</div>
+          <h2>Capture the pilot in the language of work.</h2>
+        </div>
+        <p>Participants fill this in live and submit it to Josh and the event team. Examples appear as gray placeholder text only.</p>
+      </div>
+      <div class="kit-grid">
+        <article class="kit-card">
+          <h3>Experience layer</h3>
+          <p>Who needs to see the workbench: executive, frontline operator, program owner, or IT and trust lead?</p>
+        </article>
+        <article class="kit-card">
+          <h3>Backbone layer</h3>
+          <p>Name the grounding sources and systems that make the agent useful in context.</p>
+        </article>
+        <article class="kit-card">
+          <h3>Trust layer</h3>
+          <p>State what the agent cannot do and where a human must review or approve.</p>
+        </article>
+      </div>
+      <div class="card" style="margin-top: 16px;">
+          <div class="act-number">Two paths, one plan</div>
+          <h3>Build live if you can. Keep the plan either way.</h3>
+          <p id="pathSummary">Blueprint Path: use the plan as a build-ready brief for your team or Microsoft follow-up.</p>
+      </div>
+      <div class="layout-two">
+        <div class="canvas-panel">
+          <div class="form-grid">
+            <div class="field">
+              <label for="org">Organization or table name</label>
+              <input id="org" placeholder="Example: NYC DSS, CUNY, Stony Brook Medicine" />
+            </div>
+            <div class="field">
+              <label for="customerEmail">Follow-up email</label>
+              <input id="customerEmail" type="email" placeholder="Example: name@organization.gov" />
+            </div>
+            <div class="field">
+              <label for="outcome">Strategic outcome</label>
+              <input id="outcome" placeholder="Example: Reduce resident case handoffs, improve student persistence, accelerate research startup" />
+            </div>
+            <div class="field">
+              <label for="persona">Primary persona</label>
+              <input id="persona" placeholder="Example: Case intake specialist, advisor, research operations lead" />
+            </div>
+            <div class="field">
+              <label for="agent">Agent concept</label>
+              <input id="agent" placeholder="Example: No Wrong Door Agent, Advising Navigator, Research Startup Agent" />
+            </div>
+            <div class="field full">
+              <label for="task">Delegated task</label>
+              <textarea id="task" placeholder="Example: Classify requests, identify missing information, draft next-step guidance for human review"></textarea>
+            </div>
+            <div class="field full">
+              <label for="knowledge">Grounding sources</label>
+              <textarea id="knowledge" placeholder="Example: Policy manual, service catalog, handbook, SOPs, FAQs, forms, SharePoint folder"></textarea>
+            </div>
+            <div class="field full">
+              <label for="intents">End-user intent and likely questions</label>
+              <textarea id="intents" placeholder="Example: Where do I start? Am I eligible? What information is missing? What happens next?"></textarea>
+            </div>
+            <div class="field full">
+              <label for="handoff">Triage and human handoff</label>
+              <textarea id="handoff" placeholder="Example: Ask clarifying questions first. Hand off when eligibility, legal, clinical, financial, or enforcement decisions are requested."></textarea>
+            </div>
+            <div class="field">
+              <label for="systems">Systems to connect</label>
+              <input id="systems" placeholder="Example: M365, SharePoint, CRM, SIS, LMS, EHR, ServiceNow, ERP" />
+            </div>
+            <div class="field">
+              <label for="process">Business process</label>
+              <input id="process" placeholder="Example: Resident request intake to resolution, advising prep to follow-up" />
+            </div>
+            <div class="field">
+              <label for="measure">Success measure</label>
+              <input id="measure" placeholder="Example: Prep time saved, cycle time reduced, first-contact resolution, fewer repeat questions" />
+            </div>
+            <div class="field full">
+              <label for="constraint">Constraint / human review point</label>
+              <textarea id="constraint" placeholder="Example: Agent can draft and recommend, but cannot approve, determine eligibility, or send without human review"></textarea>
+            </div>
+          </div>
+          <div class="hero-actions">
+            <button class="btn primary" id="copyPlanButton" onclick="copyPlan()">Copy plan</button>
+            <button class="btn" onclick="previewBrief()">Review brief</button>
+            <button class="btn ghost" onclick="downloadJson()">Download backup JSON</button>
+          </div>
+          <div class="submission-note" id="submissionStatus">
+            Copy your plan, then paste it into email, Teams, or your notes. Nothing is automatically sent from this page.
+          </div>
+        </div>
+
+        <aside class="output-panel" id="portal">
+          <div class="eyebrow">Submission checklist</div>
+          <h2 id="portalTitle">Before you submit</h2>
+          <p id="portalSummary" class="hero-subtitle">Keep this practical. The best submissions name the outcome, the person doing the work, the task to delegate, the knowledge sources, and the constraint.</p>
+          <div class="persona-dashboard" id="personaDashboard"></div>
+          <div class="architecture" id="architecture"></div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="resources" class="stage-section locked" data-stage="permeate">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Participant assets</div>
+          <h2>Give each group something specific to take with them.</h2>
+        </div>
+        <p>These should be swapped for final links before the live event, but the structure is right: table, canvas, starter prompts, and next step.</p>
+      </div>
+      <div class="resource-grid">
+        <a class="resource" id="sectorTableLink" href="#" target="_blank" rel="noreferrer">
+          <strong>Sector periodic table</strong>
+          <span>Open the relevant SLG, HED, or AMC agent map.</span>
+        </a>
+        <a class="resource" href="#canvas">
+          <strong>Agent design canvas</strong>
+          <span>Capture outcome, persona, grounding, systems, constraints, and metric.</span>
+        </a>
+        <a class="resource" href="#portal">
+          <strong>Submission checklist</strong>
+          <span>Confirm the brief has the outcome, persona, task, grounding, systems, metric, and review point.</span>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const sectors = {
+      hed: {
+        name: "Higher Education",
+        short: "HED",
+        url: "https://reynolds711.github.io/periodic-table-of-agents/HED/",
+        heading: "Higher Education starting points",
+        lensTitle: "Start with the student journey",
+        lensBody: "Map the agent to retention, advising, enrollment, research, advancement, or institutional operations. Then identify SIS/LMS/data backbone and FERPA/equity/audit controls.",
+        lensTags: ["SIS", "LMS", "FERPA", "Advising", "Retention"],
+        recipes: [
+          {
+            title: "Advising Navigator",
+            outcome: "Improve student persistence by helping advisors identify the next best intervention.",
+            persona: "Advisor or student success lead",
+            agent: "Student Advising Navigator",
+            task: "Summarize policy, degree progress, risks, and suggested next steps for human advisor review.",
+            knowledge: "Student handbook, degree requirements, advising FAQs, program maps, support service directory.",
+            systems: "SIS, LMS, SharePoint, Teams",
+            measure: "Advisor prep time, student follow-up completion, persistence signal movement",
+            constraint: "The agent may recommend options but cannot make academic standing, aid, or enrollment decisions."
+          },
+          {
+            title: "Research Grant Concierge",
+            outcome: "Increase research proposal throughput and reduce missed funding opportunities.",
+            persona: "Research administrator or faculty investigator",
+            agent: "Grant Lifecycle Agent",
+            task: "Match opportunities to faculty profiles, summarize requirements, draft checklists, and flag compliance steps.",
+            knowledge: "Grant calendars, sponsor guidelines, institutional research policies, past proposal examples.",
+            systems: "SharePoint, Grants system, M365, CRM",
+            measure: "Qualified opportunities surfaced, proposal cycle time, compliance rework avoided",
+            constraint: "The agent cannot certify eligibility, approve budgets, or submit on behalf of the institution."
+          },
+          {
+            title: "Enrollment Services Helper",
+            outcome: "Reduce friction for prospective and current students navigating admissions, aid, and registration.",
+            persona: "Enrollment services staff member",
+            agent: "Enrollment Services Navigator",
+            task: "Answer policy-grounded questions, identify missing information, and draft next-step communications.",
+            knowledge: "Admissions FAQ, financial aid policy, registration calendar, residency rules, forms library.",
+            systems: "CRM, SIS, SharePoint, Forms",
+            measure: "Case deflection, response time, complete applications, fewer repeat contacts",
+            constraint: "The agent must cite sources and route exceptions or eligibility-sensitive cases to staff."
+          }
+        ]
+      },
+      slg: {
+        name: "State & Local Government",
+        short: "SLG",
+        url: "https://reynolds711.github.io/periodic-table-of-agents/SLG/",
+        heading: "State & Local Government starting points",
+        lensTitle: "Start with service access and public trust",
+        lensBody: "Map the agent to service delivery, eligibility, licensing, procurement, workforce, or cross-agency coordination. Then identify privacy, audit, open records, equity, and cyber controls.",
+        lensTags: ["CRM", "ServiceNow", "CJIS", "Audit", "Public trust"],
+        recipes: [
+          {
+            title: "No Wrong Door Navigator",
+            outcome: "Help residents find the right program, office, document, or next step without repeated handoffs.",
+            persona: "Constituent services or case intake specialist",
+            agent: "No Wrong Door Service Agent",
+            task: "Classify requests, identify the likely service path, gather missing information, and draft a handoff summary.",
+            knowledge: "Agency FAQs, service catalog, eligibility guidance, forms, office directory, escalation rules.",
+            systems: "CRM, ServiceNow, SharePoint, M365",
+            measure: "First-contact resolution, reduced transfers, intake completion, resident satisfaction",
+            constraint: "The agent cannot determine eligibility or promise benefit outcomes; it routes and explains next steps."
+          },
+          {
+            title: "Permitting Accelerator",
+            outcome: "Reduce permitting cycle time while improving transparency for applicants.",
+            persona: "Permitting office manager",
+            agent: "Permit Intake and Routing Agent",
+            task: "Validate application completeness, identify required reviews, prepare applicant updates, and flag exceptions.",
+            knowledge: "Permit checklists, code references, zoning policy, fee schedule, inspection rules.",
+            systems: "Permitting platform, GIS, document store, CRM",
+            measure: "Cycle time, incomplete submissions, inspection scheduling time, applicant updates delivered",
+            constraint: "The agent cannot approve permits, interpret disputed code, or bypass required inspections."
+          },
+          {
+            title: "Procurement Policy Copilot",
+            outcome: "Speed routine purchasing while reducing policy exceptions and rework.",
+            persona: "Procurement analyst or program buyer",
+            agent: "Procurement Guidance Agent",
+            task: "Check thresholds, summarize required steps, draft RFP language, and identify policy risks.",
+            knowledge: "Procurement manual, vendor rules, contract templates, delegated authority matrix.",
+            systems: "ERP, procurement system, SharePoint, finance platform",
+            measure: "Purchase cycle time, policy exceptions, RFP drafting time, approval rework",
+            constraint: "The agent cannot select vendors, approve spend, or replace required legal/procurement review."
+          }
+        ]
+      },
+      amc: {
+        name: "Academic Medical Center",
+        short: "AMC",
+        url: "https://reynolds711.github.io/periodic-table-of-agents/AMC/",
+        heading: "Academic Medical Center starting points",
+        lensTitle: "Start with the tripartite mission",
+        lensBody: "Map the agent to clinical care, education, research, patient access, revenue cycle, or operations. Then identify EHR/LMS/research connectors and HIPAA/IRB/equity/audit controls.",
+        lensTags: ["EHR", "HIPAA", "IRB", "Research", "Revenue cycle"],
+        recipes: [
+          {
+            title: "Research Operations Concierge",
+            outcome: "Accelerate study startup and reduce administrative friction for investigators.",
+            persona: "Research operations leader",
+            agent: "Research Startup Agent",
+            task: "Summarize protocol requirements, route documents, identify missing approvals, and prepare status briefs.",
+            knowledge: "IRB guidance, study startup checklist, sponsor requirements, institutional SOPs, templates.",
+            systems: "CTMS, IRB system, SharePoint, M365",
+            measure: "Study startup cycle time, missing document rate, coordinator time saved",
+            constraint: "The agent cannot approve protocols, interpret clinical risk, or replace IRB/compliance review."
+          },
+          {
+            title: "Prior Authorization Workbench",
+            outcome: "Reduce care access delays caused by documentation and payer requirement friction.",
+            persona: "Prior authorization specialist",
+            agent: "Prior Auth Preparation Agent",
+            task: "Gather required information, summarize criteria, draft submission packets, and flag missing evidence.",
+            knowledge: "Payer guidelines, clinical documentation templates, policy library, prior auth SOPs.",
+            systems: "EHR, payer portal, document store, revenue cycle tools",
+            measure: "Submission prep time, first-pass approval rate, avoidable denials, patient delay reduction",
+            constraint: "The agent cannot make clinical judgments, submit without review, or override payer requirements."
+          },
+          {
+            title: "Faculty and Learner Support Hub",
+            outcome: "Improve faculty and learner experience across policy, scheduling, credentialing, and support.",
+            persona: "Medical education administrator",
+            agent: "Medical Education Support Agent",
+            task: "Answer grounded policy questions, assemble onboarding steps, draft communications, and route complex issues.",
+            knowledge: "GME policies, rotation schedules, credentialing requirements, learner handbook, support directory.",
+            systems: "LMS, HR system, scheduling system, SharePoint",
+            measure: "Admin response time, onboarding completion, fewer repeated questions, learner satisfaction",
+            constraint: "The agent cannot make credentialing decisions, evaluate learners, or disclose protected data."
+          }
+        ]
+      }
+    };
+
+    let activeSector = "hed";
+    let activeRecipeIndex = 0;
+    let activeStage = "delegate";
+    let unlockedStageIndex = 0;
+    let accessPath = "blueprint";
+    let candidateTasks = [];
+    let promotedTaskIndex = -1;
+    const stageOrder = ["delegate", "triage", "permeate"];
+
+    const fields = ["org", "customerEmail", "outcome", "persona", "agent", "task", "knowledge", "intents", "handoff", "systems", "process", "measure", "constraint"];
+    const triageFields = ["triageIntents", "triageQuestions", "clarifyingQuestions", "triageCategories", "handoffTriggers", "escalationMessage", "testCases"];
+
+    function el(id) {
+      return document.getElementById(id);
+    }
+
+    function init() {
+      renderSectorTabs();
+      setSector("hed");
+      fields.forEach((id) => el(id).addEventListener("input", generateBrief));
+      triageFields.forEach((id) => el(id).addEventListener("input", generateBrief));
+      ["promotedTask", "promotedOwner", "promotedGrounding"].forEach((id) => {
+        el(id).addEventListener("input", syncPromotedTaskToCanvas);
+      });
+      setStage("delegate");
+    }
+
+    function setStage(stage) {
+      const index = stageOrder.indexOf(stage);
+      if (index < 0 || index > unlockedStageIndex) return;
+      activeStage = stage;
+
+      document.querySelectorAll("[data-stage]").forEach((section) => {
+        const match = section.dataset.stage === stage;
+        section.classList.toggle("inactive", !match);
+        section.classList.toggle("locked", stageOrder.indexOf(section.dataset.stage) > unlockedStageIndex);
+      });
+
+      document.querySelectorAll("[data-stage-button]").forEach((button) => {
+        const buttonIndex = stageOrder.indexOf(button.dataset.stageButton);
+        button.classList.toggle("active", button.dataset.stageButton === stage);
+        button.classList.toggle("locked", buttonIndex > unlockedStageIndex);
+      });
+
+      const current = document.querySelector(`[data-stage="${stage}"]`);
+      if (current) current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function advanceStage(stage) {
+      const index = stageOrder.indexOf(stage);
+      if (index < 0) return;
+      unlockedStageIndex = Math.max(unlockedStageIndex, index);
+      setStage(stage);
+    }
+
+    function setAccessPath(path) {
+      accessPath = path;
+      document.querySelectorAll("[data-path]").forEach((button) => {
+        button.classList.toggle("active", button.dataset.path === path);
+      });
+      el("statusPath").textContent = path === "builder" ? "Build Path" : "Blueprint Path";
+      el("pathGuidance").textContent = path === "builder"
+        ? "Build Path: build live in Agent Builder if available, then submit the same design brief for follow-up."
+        : "Blueprint Path: capture the role, grounding, questions, handoff, and process. Josh can build from the submitted brief.";
+      el("pathSummary").textContent = path === "builder"
+        ? "Build Path: create the agent live if Agent Builder is available, then submit the blueprint so the team can follow up."
+        : "Blueprint Path: submit the agent blueprint so Josh and the team can build from it after the session.";
+    }
+
+    function addCandidateTask() {
+      const task = el("candidateTask").value.trim();
+      const owner = el("candidateOwner").value.trim();
+      const grounding = el("candidateGrounding").value.trim();
+      if (!task) {
+        el("candidateTask").focus();
+        return;
+      }
+      candidateTasks.push({ task, owner, grounding });
+      el("candidateTask").value = "";
+      el("candidateOwner").value = "";
+      el("candidateGrounding").value = "";
+      renderCandidateTasks();
+    }
+
+    function renderCandidateTasks() {
+      const list = el("candidateList");
+      if (!candidateTasks.length) {
+        list.innerHTML = "";
+        return;
+      }
+      list.innerHTML = candidateTasks.map((item, index) => `
+        <article class="candidate">
+          <div class="candidate-top">
+            <strong>${index + 1}. ${escapeHtml(item.task)}</strong>
+            <button onclick="promoteCandidateTask(${index})">Promote to Triage</button>
+          </div>
+          <span>${escapeHtml(item.owner || "Owner not specified")}</span>
+          <span>${escapeHtml(item.grounding || "Grounding not specified")}</span>
+        </article>
+      `).join("");
+    }
+
+    function promoteCandidateTask(index) {
+      const item = candidateTasks[index];
+      if (!item) return;
+      promotedTaskIndex = index;
+      el("task").value = item.task;
+      if (item.owner) el("persona").value = item.owner;
+      if (item.grounding) el("knowledge").value = item.grounding;
+      el("promotedTask").value = item.task;
+      el("promotedOwner").value = item.owner || "";
+      el("promotedGrounding").value = item.grounding || "";
+      advanceStage("triage");
+      generateBrief();
+    }
+
+    function applyPromotedTaskEdits() {
+      syncPromotedTaskToCanvas();
+      if (promotedTaskIndex >= 0 && candidateTasks[promotedTaskIndex]) {
+        candidateTasks[promotedTaskIndex] = {
+          task: el("promotedTask").value.trim(),
+          owner: el("promotedOwner").value.trim(),
+          grounding: el("promotedGrounding").value.trim()
+        };
+        renderCandidateTasks();
+      }
+
+      generateBrief();
+      el("submissionStatus").textContent = "Promoted task edits applied to the final canvas.";
+    }
+
+    function syncPromotedTaskToCanvas() {
+      const task = el("promotedTask").value.trim();
+      const owner = el("promotedOwner").value.trim();
+      const grounding = el("promotedGrounding").value.trim();
+      if (task) el("task").value = task;
+      if (owner) el("persona").value = owner;
+      if (grounding) el("knowledge").value = grounding;
+      generateBrief();
+    }
+
+    function applyTriageWorkbench() {
+      const intents = el("triageIntents").value.trim();
+      const questions = el("triageQuestions").value.trim();
+      const clarifying = el("clarifyingQuestions").value.trim();
+      const categories = el("triageCategories").value.trim();
+      const triggers = el("handoffTriggers").value.trim();
+      const escalation = el("escalationMessage").value.trim();
+      const tests = el("testCases").value.trim();
+
+      const intentText = [
+        intents && `End-user intents: ${intents}`,
+        questions && `Anticipated questions: ${questions}`,
+        clarifying && `Clarifying questions: ${clarifying}`,
+        categories && `Triage categories: ${categories}`,
+        tests && `Test cases: ${tests}`
+      ].filter(Boolean).join("\n\n");
+
+      const handoffText = [
+        triggers && `Human handoff triggers: ${triggers}`,
+        escalation && `Escalation message: ${escalation}`
+      ].filter(Boolean).join("\n\n");
+
+      if (intentText) el("intents").value = intentText;
+      if (handoffText) el("handoff").value = handoffText;
+      if (triggers && !el("constraint").value.trim()) {
+        el("constraint").value = `The agent must hand off when the request involves: ${triggers}.`;
+      }
+      generateBrief();
+      el("submissionStatus").textContent = "Triage details applied to the final canvas.";
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function renderSectorTabs() {
+      const tabs = el("sectorTabs");
+      tabs.innerHTML = Object.entries(sectors).map(([key, sector]) => `
+        <button class="sector-tab" data-sector="${key}" onclick="setSector('${key}')">
+          <strong>${sector.name}</strong>
+          <span>${sector.lensTitle}</span>
+        </button>
+      `).join("");
+    }
+
+    function setSector(key) {
+      activeSector = key;
+      activeRecipeIndex = 0;
+      const sector = sectors[key];
+      document.querySelectorAll(".sector-tab").forEach((tab) => {
+        tab.classList.toggle("active", tab.dataset.sector === key);
+      });
+      el("statusSector").textContent = sector.name;
+      el("recipeHeading").textContent = sector.heading;
+      el("ptLensTitle").textContent = sector.lensTitle;
+      el("ptLensBody").textContent = sector.lensBody;
+      el("ptLensTags").innerHTML = sector.lensTags.map((tag) => `<span class="tag">${tag}</span>`).join("");
+      el("sectorTableLink").href = sector.url;
+      renderRecipes();
+      clearRecipeSelection();
+      generateBrief();
+    }
+
+    function renderRecipes() {
+      const sector = sectors[activeSector];
+      el("recipeList").innerHTML = sector.recipes.map((recipe, index) => `
+        <article class="recipe" data-recipe="${index}" onclick="selectRecipe(${index})">
+          <div>
+            <h3>${recipe.title}</h3>
+            <p>${recipe.outcome}</p>
+            <div class="tags">${recipe.systems.split(",").map((tag) => `<span class="tag">${tag.trim()}</span>`).join("")}</div>
+          </div>
+          <strong>Example</strong>
+        </article>
+      `).join("");
+    }
+
+    function selectRecipe(index) {
+      activeRecipeIndex = index;
+      const recipe = sectors[activeSector].recipes[index];
+      document.querySelectorAll(".recipe").forEach((card) => {
+        card.classList.toggle("active", Number(card.dataset.recipe) === index);
+      });
+      el("statusRecipe").textContent = recipe.title;
+      el("outcome").placeholder = `Example: ${recipe.outcome}`;
+      el("persona").placeholder = `Example: ${recipe.persona}`;
+      el("agent").placeholder = `Example: ${recipe.agent}`;
+      el("task").placeholder = `Example: ${recipe.task}`;
+      el("knowledge").placeholder = `Example: ${recipe.knowledge}`;
+      el("systems").placeholder = `Example: ${recipe.systems}`;
+      el("measure").placeholder = `Example: ${recipe.measure}`;
+      el("constraint").placeholder = `Example: ${recipe.constraint}`;
+      generateBrief();
+    }
+
+    function clearRecipeSelection() {
+      activeRecipeIndex = -1;
+      document.querySelectorAll(".recipe").forEach((card) => card.classList.remove("active"));
+      el("statusRecipe").textContent = "None selected";
+      fields.forEach((id) => { el(id).value = ""; });
+      el("org").placeholder = "Example: NYC DSS, CUNY, Stony Brook Medicine";
+      el("customerEmail").placeholder = "Example: name@organization.gov";
+      el("outcome").placeholder = "Example: Reduce resident case handoffs, improve student persistence, accelerate research startup";
+      el("persona").placeholder = "Example: Case intake specialist, advisor, research operations lead";
+      el("agent").placeholder = "Example: No Wrong Door Agent, Advising Navigator, Research Startup Agent";
+      el("task").placeholder = "Example: Classify requests, identify missing information, draft next-step guidance for human review";
+      el("knowledge").placeholder = "Example: Policy manual, service catalog, handbook, SOPs, FAQs, forms, SharePoint folder";
+      el("intents").placeholder = "Example: Where do I start? Am I eligible? What information is missing? What happens next?";
+      el("handoff").placeholder = "Example: Ask clarifying questions first. Hand off when eligibility or approval decisions are requested.";
+      el("systems").placeholder = "Example: M365, SharePoint, CRM, SIS, LMS, EHR, ServiceNow, ERP";
+      el("process").placeholder = "Example: Resident request intake to resolution, advising prep to follow-up";
+      el("measure").placeholder = "Example: Prep time saved, cycle time reduced, first-contact resolution, fewer repeat questions";
+      el("constraint").placeholder = "Example: Agent can draft and recommend, but cannot approve, determine eligibility, or send without human review";
+    }
+
+    function getCanvas() {
+      const data = {};
+      fields.forEach((id) => data[id] = el(id).value.trim());
+      triageFields.forEach((id) => data[id] = el(id).value.trim());
+      data.sector = sectors[activeSector].name;
+      data.sectorShort = sectors[activeSector].short;
+      data.periodicTableUrl = sectors[activeSector].url;
+      return data;
+    }
+
+    function generateBrief() {
+      const data = getCanvas();
+      const portalName = `${data.agent || "Agent"} Portal`;
+      if (!data.outcome && !data.persona && !data.agent && !data.task) {
+        el("portalTitle").textContent = "Before you submit";
+        el("portalSummary").textContent = "Keep this practical. The best submissions name the outcome, the person doing the work, the task to delegate, the knowledge sources, and the constraint.";
+      } else {
+        el("portalTitle").textContent = "Submission summary";
+        el("portalSummary").textContent = `${data.org || data.sector} is designing a ${data.sectorShort} pilot focused on: ${data.outcome || "a strategic outcome"}`;
+      }
+
+      const cards = [
+        {
+          title: "Executive view",
+          body: `Track outcome, adoption, risk, and the decision needed to move from pilot to scale. Measure: ${data.measure || "define one success metric"}.`
+        },
+        {
+          title: `${data.persona || "Primary persona"} workbench`,
+          body: `Surface the intent, likely questions, next best action, and drafts for human review. Delegated task: ${data.task || "define the bounded task"}.`
+        },
+        {
+          title: "IT and trust view",
+          body: `Show connected systems, data sources, handoff rules, audit trail, and constraints. Guardrail: ${data.constraint || "define what the agent cannot do"}.`
+        }
+      ];
+      el("personaDashboard").innerHTML = cards.map((card) => `
+        <div class="persona-card">
+          <h4>${card.title}</h4>
+          <p>${card.body}</p>
+        </div>
+      `).join("");
+
+      const layers = [
+        ["Experience layer", "Role-based view: executive, frontline/persona, IT and trust"],
+        ["Agent layer", data.agent || "Named agent concept"],
+        ["Intent layer", data.intents || "User intents, likely questions, and triage categories"],
+        ["Grounding layer", data.knowledge || "Policy, FAQ, handbook, process, and institutional content"],
+        ["Systems layer", data.systems || "M365, SharePoint, CRM, EHR, SIS, LMS, ServiceNow, or ERP"],
+        ["Trust layer", data.constraint || "Human review, audit, privacy, compliance, and escalation boundaries"]
+      ];
+      el("architecture").innerHTML = layers.map((layer) => `
+        <div class="layer"><strong>${layer[0]}</strong><span>${layer[1]}</span></div>
+      `).join("");
+
+    }
+
+    function buildEmailBody(data) {
+      return `Agents to Agency design brief
+
+Sector: ${data.sector}
+Path: ${accessPath === "builder" ? "Build Path" : "Blueprint Path"}
+Organization/table: ${data.org || "Not provided"}
+Follow-up email: ${data.customerEmail || "Not provided"}
+Selected recipe: ${el("statusRecipe").textContent}
+
+Candidate tasks captured:
+${candidateTasks.length ? candidateTasks.map((item, index) => `${index + 1}. ${item.task} | Owner: ${item.owner || "Not provided"} | Grounding: ${item.grounding || "Not provided"}`).join("\n") : "None provided"}
+
+Strategic outcome:
+${data.outcome || "Not provided"}
+
+Primary persona:
+${data.persona || "Not provided"}
+
+Agent concept:
+${data.agent || "Not provided"}
+
+Delegated task:
+${data.task || "Not provided"}
+
+Grounding sources:
+${data.knowledge || "Not provided"}
+
+End-user intent and likely questions:
+${data.intents || "Not provided"}
+
+Anticipated questions:
+${data.triageQuestions || "Not provided"}
+
+Clarifying questions:
+${data.clarifyingQuestions || "Not provided"}
+
+Triage categories:
+${data.triageCategories || "Not provided"}
+
+Triage and human handoff:
+${data.handoff || "Not provided"}
+
+Human handoff triggers:
+${data.handoffTriggers || "Not provided"}
+
+Escalation message:
+${data.escalationMessage || "Not provided"}
+
+Test cases:
+${data.testCases || "Not provided"}
+
+Systems to connect:
+${data.systems || "Not provided"}
+
+Business process:
+${data.process || "Not provided"}
+
+Success measure:
+${data.measure || "Not provided"}
+
+Constraint / human review point:
+${data.constraint || "Not provided"}
+
+Periodic Table:
+${data.periodicTableUrl}`;
+    }
+
+    function buildParticipantArtifactText(data) {
+      return `Your Agents to Agency pilot plan
+
+Organization or table:
+${data.org || "Not provided"}
+
+Sector:
+${data.sector}
+
+Path selected:
+${accessPath === "builder" ? "Build Path" : "Blueprint Path"}
+
+Strategic outcome:
+${data.outcome || "Not provided"}
+
+Agent concept:
+${data.agent || "Not provided"}
+
+Primary persona:
+${data.persona || "Not provided"}
+
+Delegated task:
+${data.task || "Not provided"}
+
+Grounding sources:
+${data.knowledge || "Not provided"}
+
+End-user intents and likely questions:
+${data.intents || "Not provided"}
+
+Human handoff:
+${data.handoff || "Not provided"}
+
+Business process:
+${data.process || "Not provided"}
+
+Systems to connect:
+${data.systems || "Not provided"}
+
+Success measure:
+${data.measure || "Not provided"}
+
+Constraint or human review point:
+${data.constraint || "Not provided"}
+
+Recommended next step:
+Review this plan with your Microsoft account team. Confirm the source content, the system access path, and the human review rule before building or piloting the agent.`;
+    }
+
+    function buildParticipantArtifactHtml(data) {
+      const rows = [
+        ["Organization or table", data.org],
+        ["Sector", data.sector],
+        ["Path selected", accessPath === "builder" ? "Build Path" : "Blueprint Path"],
+        ["Strategic outcome", data.outcome],
+        ["Agent concept", data.agent],
+        ["Primary persona", data.persona],
+        ["Delegated task", data.task],
+        ["Grounding sources", data.knowledge],
+        ["End-user intents and likely questions", data.intents],
+        ["Human handoff", data.handoff],
+        ["Business process", data.process],
+        ["Systems to connect", data.systems],
+        ["Success measure", data.measure],
+        ["Constraint or human review point", data.constraint]
+      ];
+
+      return `
+        <div style="font-family:Segoe UI,Aptos,Calibri,sans-serif;line-height:1.45;color:#242424;">
+          <h1 style="font-size:24px;margin:0 0 8px;">Your Agents to Agency pilot plan</h1>
+          <p style="margin:0 0 18px;color:#5c5c5c;">This is the agent blueprint your team created during the workshop.</p>
+          <table style="border-collapse:collapse;width:100%;max-width:760px;">
+            ${rows.map(([label, value]) => `
+              <tr>
+                <td style="border:1px solid #dedede;padding:10px;font-weight:700;width:220px;vertical-align:top;">${escapeHtml(label)}</td>
+                <td style="border:1px solid #dedede;padding:10px;vertical-align:top;">${escapeHtml(value || "Not provided")}</td>
+              </tr>
+            `).join("")}
+          </table>
+          <h2 style="font-size:18px;margin:22px 0 8px;">Recommended next step</h2>
+          <p style="margin:0;color:#5c5c5c;">Review this plan with your Microsoft account team. Confirm the source content, the system access path, and the human review rule before building or piloting the agent.</p>
+        </div>`;
+    }
+
+    function getSubmissionPayload() {
+      const data = getCanvas();
+      return {
+        submittedAt: new Date().toISOString(),
+        sector: data.sector,
+        sectorShort: data.sectorShort,
+        accessPath,
+        organization: data.org,
+        customerEmail: data.customerEmail,
+        selectedRecipe: el("statusRecipe").textContent,
+        candidateTasks,
+        promotedTask: promotedTaskIndex >= 0 ? candidateTasks[promotedTaskIndex] : null,
+        strategicOutcome: data.outcome,
+        primaryPersona: data.persona,
+        agentConcept: data.agent,
+        delegatedTask: data.task,
+        groundingSources: data.knowledge,
+        endUserIntents: data.intents,
+        triageIntents: data.triageIntents,
+        anticipatedQuestions: data.triageQuestions,
+        clarifyingQuestions: data.clarifyingQuestions,
+        triageCategories: data.triageCategories,
+        triageAndHandoff: data.handoff,
+        handoffTriggers: data.handoffTriggers,
+        escalationMessage: data.escalationMessage,
+        testCases: data.testCases,
+        systemsToConnect: data.systems,
+        businessProcess: data.process,
+        successMeasure: data.measure,
+        constraint: data.constraint,
+        periodicTableUrl: data.periodicTableUrl,
+        participantArtifactText: buildParticipantArtifactText(data),
+        participantArtifactHtml: buildParticipantArtifactHtml(data),
+        internalBriefText: buildEmailBody(data)
+      };
+    }
+
+    function previewBrief() {
+      el("submissionStatus").textContent = "Plan preview is ready. Use Copy plan when your table is finished.";
+      alert(buildEmailBody(getCanvas()));
+    }
+
+    async function copyPlan() {
+      generateBrief();
+      const payload = getSubmissionPayload();
+      const status = el("submissionStatus");
+      try {
+        await navigator.clipboard.writeText(payload.participantArtifactText);
+        status.textContent = "Plan copied. Paste it into email, Teams, or your notes to share it.";
+      } catch (error) {
+        status.textContent = "Clipboard copy was blocked. Use Review brief, select the text, and copy manually.";
+        alert(payload.participantArtifactText);
+      }
+    }
+
+    function downloadJson() {
+      const payload = getSubmissionPayload();
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${payload.sectorShort.toLowerCase()}-agent-canvas.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function openSectorTable() {
+      window.open(sectors[activeSector].url, "_blank", "noreferrer");
+    }
+
+    init();
+  </script>
+</body>
+</html>
