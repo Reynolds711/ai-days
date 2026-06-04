@@ -751,6 +751,19 @@
       background: var(--cp-accent-soft);
     }
 
+    .path-card.disabled {
+      cursor: not-allowed;
+      opacity: 0.48;
+      background: var(--cp-surface-soft);
+      border-style: dashed;
+    }
+
+    .path-card.disabled strong::after {
+      content: " — optional later";
+      color: var(--cp-text-muted);
+      font-weight: 700;
+    }
+
     .path-card strong {
       display: block;
       margin-bottom: 6px;
@@ -898,7 +911,7 @@
           <h1>Design one agent pilot. Submit the brief.</h1>
           <p class="hero-subtitle">
             A live workshop cockpit for State &amp; Local Government, Higher Education, and Academic Medical Center teams.
-            Move in order: Phase 1 finds the task, Phase 2 qualifies the pilot, and Phase 3 captures the final brief.
+            Today uses one path: the Blueprint Path. Move in order: Phase 1 finds the task, Phase 2 qualifies the pilot, and Phase 3 captures the final brief.
           </p>
           <div class="hero-actions">
             <a class="btn primary" href="#phase-sequence">Start with the sequence</a>
@@ -916,7 +929,7 @@
         <div class="quick-status">
           <div class="status-row"><span>Session frame</span><span>Phase 1 / Phase 2 / Phase 3</span></div>
           <div class="status-row"><span>Current sector</span><span id="statusSector">Higher Education</span></div>
-          <div class="status-row"><span>Path</span><span id="statusPath">Blueprint Path</span></div>
+          <div class="status-row"><span>Today’s path</span><span id="statusPath">Blueprint Path</span></div>
           <div class="status-row"><span>Reference recipe</span><span id="statusRecipe">None selected</span></div>
           <div class="status-row"><span>Artifact output</span><span>Email-ready design brief</span></div>
         </div>
@@ -935,22 +948,22 @@
 
     <section id="phase-sequence" class="sequence-guide">
       <div class="eyebrow">How to move through the session</div>
-      <h2>Do the phases in order.</h2>
-      <p>Each phase unlocks the next one. If you are using the Word form, fill out the matching section as you reach that phase on this page.</p>
+      <h2>Follow one path: Blueprint.</h2>
+      <p>Do not choose between paths today. Everyone follows the same sequence: fill out Phase 1, then Phase 2, then Phase 3. Each phase unlocks the next one and maps directly to the Word form.</p>
       <div class="sequence-grid">
         <article class="sequence-card">
           <strong>Phase 1: Delegate</strong>
-          <span>Use this first. List candidate tasks, name who does them today, and pick one bounded task to promote.</span>
+          <span>Start here. List candidate tasks, name who does them today, and pick one bounded task to promote.</span>
           <span class="when">Stop when: you have one promoted task.</span>
         </article>
         <article class="sequence-card">
           <strong>Phase 2: Triage</strong>
-          <span>Use this after Phase 1. Qualify the task: intents, questions, categories, handoff triggers, and test cases.</span>
+          <span>Only do this after Phase 1. Qualify the promoted task: intents, questions, categories, handoff triggers, and test cases.</span>
           <span class="when">Stop when: you know what the agent should recognize and when it should hand off.</span>
         </article>
         <article class="sequence-card">
           <strong>Phase 3: Agency Kit</strong>
-          <span>Use this last. Turn the triaged pilot into the final brief: outcome, persona, grounding, systems, measure, and constraints.</span>
+          <span>Only do this after Phase 2. Turn the triaged pilot into the final brief: outcome, persona, grounding, systems, measure, and constraints.</span>
           <span class="when">Stop when: your pilot brief is ready to copy, download, or submit.</span>
         </article>
       </div>
@@ -1009,19 +1022,19 @@
       </div>
       <div class="card" style="margin-top: 16px;">
         <div class="act-number">Access path</div>
-        <h3>Which path are you on today?</h3>
-        <p>Select the path your table can use. Both paths capture the same design thinking.</p>
+        <h3>Today’s path: Blueprint.</h3>
+        <p>Everyone should use the Blueprint Path today. The goal is a build-ready pilot brief, not a live build.</p>
         <div class="path-grid">
-          <button class="path-card" data-path="builder" onclick="setAccessPath('builder')">
+          <button class="path-card disabled" data-path="builder" disabled aria-disabled="true">
             <strong>Build Path</strong>
-            <span>We have Microsoft 365 Copilot and Agent Builder enabled. We can build live and submit the brief.</span>
+            <span>Not used in today’s session. If you have Agent Builder access, you can experiment after the blueprint is complete.</span>
           </button>
           <button class="path-card active" data-path="blueprint" onclick="setAccessPath('blueprint')">
-            <strong>Blueprint Path</strong>
-            <span>We have Copilot Chat only, no builder access, or we are not sure. We will design and submit a build-ready brief.</span>
+            <strong>Blueprint Path — today’s path</strong>
+            <span>Use this for the session. Capture the role, grounding, questions, handoff, systems, success measure, and constraints.</span>
           </button>
         </div>
-        <div class="submission-note" id="pathGuidance">Blueprint Path: capture the role, grounding, questions, handoff, and process. Josh can build from the submitted brief.</div>
+        <div class="submission-note" id="pathGuidance">Today’s goal: complete a build-ready blueprint. Build later only if you have time and access.</div>
       </div>
       <div class="card" style="margin-top: 16px;">
         <div class="act-number">Delegation capture</div>
@@ -1502,17 +1515,16 @@
     }
 
     function setAccessPath(path) {
+      if (path !== "blueprint") {
+        path = "blueprint";
+      }
       accessPath = path;
       document.querySelectorAll("[data-path]").forEach((button) => {
         button.classList.toggle("active", button.dataset.path === path);
       });
-      el("statusPath").textContent = path === "builder" ? "Build Path" : "Blueprint Path";
-      el("pathGuidance").textContent = path === "builder"
-        ? "Build Path: build live in Agent Builder if available, then submit the same design brief for follow-up."
-        : "Blueprint Path: capture the role, grounding, questions, handoff, and process. Josh can build from the submitted brief.";
-      el("pathSummary").textContent = path === "builder"
-        ? "Build Path: create the agent live if Agent Builder is available, then submit the blueprint so the team can follow up."
-        : "Blueprint Path: submit the agent blueprint so Josh and the team can build from it after the session.";
+      el("statusPath").textContent = "Blueprint Path";
+      el("pathGuidance").textContent = "Today’s goal: complete a build-ready blueprint. Build later only if you have time and access.";
+      el("pathSummary").textContent = "Blueprint Path: submit the agent blueprint so Josh and the team can build from it after the session.";
     }
 
     function addCandidateTask() {
@@ -1767,7 +1779,7 @@
       return `Agents to Agency design brief
 
 Sector: ${data.sector}
-Path: ${accessPath === "builder" ? "Build Path" : "Blueprint Path"}
+Path: Blueprint Path
 Organization/table: ${data.org || "Not provided"}
 Follow-up email: ${data.customerEmail || "Not provided"}
 Selected recipe: ${el("statusRecipe").textContent}
@@ -1839,8 +1851,8 @@ ${data.org || "Not provided"}
 Sector:
 ${data.sector}
 
-Path selected:
-${accessPath === "builder" ? "Build Path" : "Blueprint Path"}
+Today’s path:
+Blueprint Path
 
 Strategic outcome:
 ${data.outcome || "Not provided"}
@@ -1883,7 +1895,7 @@ Review this plan with your Microsoft account team. Confirm the source content, t
       const rows = [
         ["Organization or table", data.org],
         ["Sector", data.sector],
-        ["Path selected", accessPath === "builder" ? "Build Path" : "Blueprint Path"],
+        ["Today’s path", "Blueprint Path"],
         ["Strategic outcome", data.outcome],
         ["Agent concept", data.agent],
         ["Primary persona", data.persona],
