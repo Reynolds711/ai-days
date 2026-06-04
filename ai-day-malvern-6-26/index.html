@@ -639,6 +639,61 @@
       display: none;
     }
 
+    .sequence-guide {
+      margin: 0 0 24px;
+      border: 1px solid var(--cp-border);
+      border-radius: 24px;
+      background: var(--cp-panel-strong);
+      box-shadow: 0 0 2px var(--cp-border), 0 1px 2px var(--cp-border);
+      padding: 24px;
+    }
+
+    .sequence-guide h2 {
+      margin-top: 6px;
+      font-size: clamp(28px, 4vw, 44px);
+    }
+
+    .sequence-guide > p {
+      max-width: 860px;
+      margin: 12px 0 0;
+      color: var(--cp-text-muted);
+      font-size: 17px;
+    }
+
+    .sequence-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .sequence-card {
+      border: 1px solid var(--cp-border);
+      border-radius: 18px;
+      background: var(--cp-surface);
+      padding: 18px;
+    }
+
+    .sequence-card strong {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--cp-text);
+      font-size: 18px;
+    }
+
+    .sequence-card span {
+      display: block;
+      color: var(--cp-text-muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .sequence-card .when {
+      margin-top: 12px;
+      color: var(--cp-accent);
+      font-weight: 700;
+    }
+
     .kit-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -808,7 +863,8 @@
       .stage-rail,
       .kit-grid,
       .lane-grid,
-      .resource-grid {
+      .resource-grid,
+      .sequence-grid {
         grid-template-columns: 1fr;
       }
 
@@ -842,11 +898,11 @@
           <h1>Design one agent pilot. Submit the brief.</h1>
           <p class="hero-subtitle">
             A live workshop cockpit for State &amp; Local Government, Higher Education, and Academic Medical Center teams.
-            Choose a lane, capture your outcome, and submit a design brief Josh can use after the session.
+            Move in order: Phase 1 finds the task, Phase 2 qualifies the pilot, and Phase 3 captures the final brief.
           </p>
           <div class="hero-actions">
-            <a class="btn primary" href="#acts">Start with Delegate</a>
-            <a class="btn" href="#stage-control">See session stages</a>
+            <a class="btn primary" href="#phase-sequence">Start with the sequence</a>
+            <a class="btn" href="#stage-control">See phase controls</a>
             <a class="btn ghost" href="https://reynolds711.github.io/periodic-table-of-agents/" target="_blank" rel="noreferrer">Open Periodic Table</a>
           </div>
         </div>
@@ -858,7 +914,7 @@
           <div class="sector-tabs" id="sectorTabs"></div>
         </div>
         <div class="quick-status">
-          <div class="status-row"><span>Session frame</span><span>Delegate / Triage / Permeate</span></div>
+          <div class="status-row"><span>Session frame</span><span>Phase 1 / Phase 2 / Phase 3</span></div>
           <div class="status-row"><span>Current sector</span><span id="statusSector">Higher Education</span></div>
           <div class="status-row"><span>Path</span><span id="statusPath">Blueprint Path</span></div>
           <div class="status-row"><span>Reference recipe</span><span id="statusRecipe">None selected</span></div>
@@ -870,35 +926,58 @@
     <nav class="sticky-nav">
       <strong>Live flow</strong>
       <div class="nav-links">
-        <a href="#stage-control">Stage control</a>
-        <a href="#acts">Delegate</a>
-        <a href="#stage-control">Triage</a>
-        <a href="#stage-control">Permeate</a>
+        <a href="#phase-sequence">Sequence</a>
+        <a href="#acts">Phase 1</a>
+        <a href="#stage-control">Phase 2</a>
+        <a href="#stage-control">Phase 3</a>
       </div>
     </nav>
 
+    <section id="phase-sequence" class="sequence-guide">
+      <div class="eyebrow">How to move through the session</div>
+      <h2>Do the phases in order.</h2>
+      <p>Each phase unlocks the next one. If you are using the Word form, fill out the matching section as you reach that phase on this page.</p>
+      <div class="sequence-grid">
+        <article class="sequence-card">
+          <strong>Phase 1: Delegate</strong>
+          <span>Use this first. List candidate tasks, name who does them today, and pick one bounded task to promote.</span>
+          <span class="when">Stop when: you have one promoted task.</span>
+        </article>
+        <article class="sequence-card">
+          <strong>Phase 2: Triage</strong>
+          <span>Use this after Phase 1. Qualify the task: intents, questions, categories, handoff triggers, and test cases.</span>
+          <span class="when">Stop when: you know what the agent should recognize and when it should hand off.</span>
+        </article>
+        <article class="sequence-card">
+          <strong>Phase 3: Agency Kit</strong>
+          <span>Use this last. Turn the triaged pilot into the final brief: outcome, persona, grounding, systems, measure, and constraints.</span>
+          <span class="when">Stop when: your pilot brief is ready to copy, download, or submit.</span>
+        </article>
+      </div>
+    </section>
+
     <div class="stage-rail" id="stage-control">
       <button class="stage-step active" data-stage-button="delegate" onclick="setStage('delegate')">
-        <strong>1. Delegate</strong>
-        Find the bounded task.
+        <strong>Phase 1: Delegate</strong>
+        Do this first: find the bounded task.
       </button>
       <button class="stage-step locked" data-stage-button="triage" onclick="setStage('triage')">
-        <strong>2. Triage</strong>
-        Choose the pilot.
+        <strong>Phase 2: Triage</strong>
+        Do this second: qualify the pilot.
       </button>
       <button class="stage-step locked" data-stage-button="permeate" onclick="setStage('permeate')">
-        <strong>3. Permeate</strong>
-        Design the operating model.
+        <strong>Phase 3: Agency Kit</strong>
+        Do this last: complete the brief.
       </button>
     </div>
 
     <section id="acts" class="stage-section" data-stage="delegate">
       <div class="section-head">
         <div>
-          <div class="eyebrow">Stage 1: Delegation Kit</div>
+          <div class="eyebrow">Phase 1: Delegate</div>
           <h2>Find the avocado.</h2>
         </div>
-        <p>Name the bounded task before you name the tool. This stage should produce one clear delegation candidate.</p>
+        <p>Start here. Name the bounded task before you name the tool. Phase 1 should produce one clear task to promote into Triage.</p>
       </div>
       <div class="three-acts">
         <article class="card">
@@ -947,7 +1026,7 @@
       <div class="card" style="margin-top: 16px;">
         <div class="act-number">Delegation capture</div>
         <h3>List candidate tasks before choosing one.</h3>
-        <p>Capture several tasks your organization could delegate to an AI agent. You will promote one into the Triage stage.</p>
+        <p>Capture several tasks your organization could delegate to an AI agent. Promote one task before moving to Phase 2.</p>
         <div class="task-capture-grid">
           <div class="field">
             <label for="candidateTask">Candidate task</label>
@@ -968,14 +1047,14 @@
         <div class="candidate-list" id="candidateList"></div>
       </div>
       <div class="hero-actions">
-        <button class="btn primary" onclick="advanceStage('triage')">Continue to Triage</button>
+        <button class="btn primary" onclick="advanceStage('triage')">Continue to Phase 2: Triage</button>
       </div>
     </section>
 
     <section id="recipes" class="stage-section locked" data-stage="triage">
       <div class="section-head">
         <div>
-          <div class="eyebrow">Stage 2: Triage Kit</div>
+          <div class="eyebrow">Phase 2: Triage</div>
           <h2 id="recipeHeading">Higher Education starting points</h2>
         </div>
         <p id="recipeSubhead">Use these as inspiration only. Selecting one updates gray example text, but the canvas stays blank.</p>
@@ -1086,14 +1165,14 @@
       </div>
       <div class="hero-actions">
         <button class="btn" onclick="setStage('delegate')">Back to Delegate</button>
-        <button class="btn primary" onclick="advanceStage('permeate')">Continue to Permeate</button>
+        <button class="btn primary" onclick="advanceStage('permeate')">Continue to Phase 3: Agency Kit</button>
       </div>
     </section>
 
     <section id="canvas" class="stage-section locked" data-stage="permeate">
       <div class="section-head">
         <div>
-          <div class="eyebrow">Stage 3: Agency Kit</div>
+          <div class="eyebrow">Phase 3: Agency Kit</div>
           <h2>Capture the pilot in the language of work.</h2>
         </div>
         <p>Participants fill this in live and submit it to Josh and the event team. Examples appear as gray placeholder text only.</p>
@@ -1225,7 +1304,7 @@
       <div>
         <div class="eyebrow">Participant form</div>
         <h2>Prefer paper first?</h2>
-        <p>Download the Word form and fill out Phase 1, Phase 2, and Phase 3 before transferring your answers into the live canvas.</p>
+        <p>Use the Word form the same way as the page: complete Phase 1 first, Phase 2 second, and Phase 3 last before transferring your answers into the live canvas.</p>
       </div>
       <a class="btn primary" href="assets/ai-day-malvern-6-26-participant-form.docx" download>Download Word form</a>
     </section>
