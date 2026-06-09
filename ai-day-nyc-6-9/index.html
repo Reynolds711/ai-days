@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NYC AI in a Day | Agent Workflow Guide</title>`n  <link rel="icon" href="data:,">
+  <script>
+    (() => {
+      const param = new URLSearchParams(window.location.search).get("clawpilotTheme");
+      const theme =
+        param || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      document.documentElement.setAttribute("data-theme", theme);
+    })();
+  </script>
+  <style>
+    :root {
+      color-scheme: light;
+      --cp-bg: #f7f4ef;
+      --cp-bg-elevated: #fcfbf8;
+      --cp-surface: #ffffff;
+      --cp-surface-soft: #f5f5f5;
+      --cp-border: #dedede;
+      --cp-border-strong: #919191;
+      --cp-text: #242424;
+      --cp-text-muted: #5c5c5c;
+      --cp-text-soft: #6f6f6f;
+      --cp-accent: #b11f4b;
+      --cp-accent-hover: #9a1a41;
+      --cp-accent-soft: rgba(177, 31, 75, 0.08);
+      --cp-accent-fg: #ffffff;
+      --cp-success: #16a34a;
+      --cp-danger: #dc2626;
+      --cp-warning: #f59e0b;
+      --cp-link: #0078d4;
+      --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.12);
+      --cp-overlay: rgba(255, 255, 255, 0.8);
+      --cp-panel: rgba(255, 255, 255, 0.86);
+      --cp-panel-strong: rgba(255, 255, 255, 0.96);
+      --cp-sheen: rgba(255, 255, 255, 0.55);
+      --cp-highlight: rgba(177, 31, 75, 0.12);
+    }
+    html[data-theme="dark"] {
+      color-scheme: dark;
+      --cp-bg: #3d3b3a;
+      --cp-bg-elevated: #343231;
+      --cp-surface: #292929;
+      --cp-surface-soft: #2e2e2e;
+      --cp-border: #474747;
+      --cp-border-strong: #5f5f5f;
+      --cp-text: #dedede;
+      --cp-text-muted: #919191;
+      --cp-text-soft: #b0b0b0;
+      --cp-accent: #fd8ea1;
+      --cp-accent-hover: #fb7b91;
+      --cp-accent-soft: rgba(253, 142, 161, 0.14);
+      --cp-accent-fg: #1a1a1a;
+      --cp-success: #4ade80;
+      --cp-danger: #f87171;
+      --cp-warning: #fbbf24;
+      --cp-link: #4da6ff;
+      --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.32);
+      --cp-overlay: rgba(41, 41, 41, 0.88);
+      --cp-panel: rgba(41, 41, 41, 0.72);
+      --cp-panel-strong: rgba(41, 41, 41, 0.96);
+      --cp-sheen: rgba(255, 255, 255, 0.04);
+      --cp-highlight: rgba(253, 142, 161, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--cp-bg);
+      color: var(--cp-text);
+      font-family: "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif;
+      line-height: 1.5;
+    }
+
+    a {
+      color: var(--cp-link);
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .shell {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 64px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid var(--cp-border);
+      background: var(--cp-overlay);
+      backdrop-filter: blur(12px);
+    }
+
+    .topbar-inner {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 12px 0;
+    }
+
+    .brand {
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .nav {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .nav a,
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 36px;
+      padding: 8px 12px;
+      border: 1px solid var(--cp-border);
+      border-radius: 0.625rem;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 14px;
+      transition: transform 0.16s ease, border-color 0.16s ease, background 0.16s ease;
+    }
+
+    .nav a:hover,
+    .btn:hover {
+      transform: translateY(-1px);
+      border-color: var(--cp-border-strong);
+    }
+
+    .btn.primary {
+      background: var(--cp-accent);
+      border-color: var(--cp-accent);
+      color: var(--cp-accent-fg);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(300px, 0.95fr);
+      gap: 24px;
+      align-items: stretch;
+      padding: 42px 0 24px;
+    }
+
+    .panel,
+    .phase-card,
+    .lane-card,
+    .resource-card,
+    .download-card {
+      background: var(--cp-panel-strong);
+      border: 1px solid var(--cp-border);
+      border-radius: 16px;
+      box-shadow: 0 0 2px var(--cp-border), 0 1px 2px var(--cp-border);
+    }
+
+    .hero-copy {
+      padding: 38px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-copy::after {
+      content: "NYC";
+      position: absolute;
+      right: -14px;
+      bottom: -48px;
+      color: var(--cp-accent-soft);
+      font-size: clamp(96px, 18vw, 210px);
+      font-weight: 900;
+      line-height: 1;
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      color: var(--cp-accent);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0;
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+    }
+
+    h1 {
+      max-width: 740px;
+      margin-top: 18px;
+      font-size: clamp(46px, 7.5vw, 88px);
+    }
+
+    h2 {
+      font-size: clamp(30px, 4vw, 48px);
+    }
+
+    h3 {
+      font-size: 21px;
+    }
+
+    .lede {
+      max-width: 710px;
+      margin: 22px 0 0;
+      color: var(--cp-text-muted);
+      font-size: 19px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 30px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-side {
+      padding: 26px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      justify-content: space-between;
+    }
+
+    .equation {
+      display: grid;
+      gap: 10px;
+    }
+
+    .equation-row {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr auto 1fr;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .eq-card {
+      padding: 16px;
+      border: 1px solid var(--cp-border);
+      border-radius: 16px;
+      background: var(--cp-surface);
+      min-height: 104px;
+    }
+
+    .eq-card strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 17px;
+    }
+
+    .eq-card span {
+      display: block;
+      color: var(--cp-text-muted);
+      font-size: 13px;
+    }
+
+    .operator {
+      color: var(--cp-accent);
+      font-size: 28px;
+      font-weight: 900;
+    }
+
+    .callout {
+      margin-top: 16px;
+      padding: 16px;
+      border: 1px solid var(--cp-border);
+      border-radius: 16px;
+      background: var(--cp-accent-soft);
+      color: var(--cp-text);
+      font-weight: 700;
+    }
+
+    .section {
+      margin-top: 56px;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 18px;
+    }
+
+    .section-head p {
+      max-width: 620px;
+      margin: 0;
+      color: var(--cp-text-muted);
+    }
+
+    .phase-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .phase-card {
+      padding: 20px;
+      min-height: 260px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .phase-number {
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      margin-bottom: 18px;
+      border-radius: 999px;
+      background: var(--cp-accent);
+      color: var(--cp-accent-fg);
+      font-weight: 900;
+    }
+
+    .phase-card p {
+      color: var(--cp-text-muted);
+      margin: 12px 0 16px;
+      font-size: 14.5px;
+    }
+
+    .prompt-list {
+      display: grid;
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      color: var(--cp-text-soft);
+      font-size: 13.5px;
+    }
+
+    .prompt-list li {
+      padding-left: 14px;
+      position: relative;
+    }
+
+    .prompt-list li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.62em;
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--cp-accent);
+    }
+
+    .guide-layout {
+      display: grid;
+      grid-template-columns: minmax(230px, 0.62fr) minmax(0, 1.38fr);
+      gap: 18px;
+    }
+
+    .lane-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .lane-button {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid var(--cp-border);
+      border-radius: 16px;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      text-align: left;
+      cursor: pointer;
+      transition: transform 0.16s ease, border-color 0.16s ease, background 0.16s ease;
+    }
+
+    .lane-button:hover,
+    .lane-button.active {
+      transform: translateY(-1px);
+      border-color: var(--cp-accent);
+      background: var(--cp-accent-soft);
+    }
+
+    .lane-button strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .lane-button span {
+      color: var(--cp-text-muted);
+      font-size: 13px;
+    }
+
+    .lane-card {
+      padding: 24px;
+      min-height: 100%;
+    }
+
+    .lane-meta {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 16px 0;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 6px 10px;
+      border: 1px solid var(--cp-border);
+      border-radius: 999px;
+      background: var(--cp-surface-soft);
+      color: var(--cp-text-muted);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .builder {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .builder-field {
+      padding: 14px;
+      border: 1px solid var(--cp-border);
+      border-radius: 16px;
+      background: var(--cp-surface);
+    }
+
+    .builder-field label {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--cp-text-muted);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .builder-field div {
+      min-height: 42px;
+      color: var(--cp-text);
+      font-weight: 700;
+    }
+
+    .downloads {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 12px;
+    }
+
+    .download-card,
+    .resource-card {
+      padding: 18px;
+      text-decoration: none;
+      color: var(--cp-text);
+      transition: transform 0.16s ease, border-color 0.16s ease;
+    }
+
+    .download-card:hover,
+    .resource-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--cp-border-strong);
+    }
+
+    .download-card strong,
+    .resource-card strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 16px;
+    }
+
+    .download-card span,
+    .resource-card span {
+      display: block;
+      color: var(--cp-text-muted);
+      font-size: 13.5px;
+    }
+
+    .resources {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 12px;
+    }
+
+    .footer-note {
+      margin-top: 36px;
+      color: var(--cp-text-muted);
+      font-size: 13px;
+    }
+
+    @media (max-width: 960px) {
+      .hero,
+      .guide-layout,
+      .phase-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .equation-row {
+        grid-template-columns: 1fr;
+      }
+
+      .operator {
+        text-align: center;
+      }
+
+      .builder {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">NYC AI in a Day</div>
+      <nav class="nav" aria-label="Page sections">
+        <a href="#phases">Four phases</a>
+        <a href="#lanes">Workflow lanes</a>
+        <a href="#downloads">Downloads</a>
+        <a href="#resources">Resources</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="hero" aria-labelledby="page-title">
+      <div class="panel hero-copy">
+        <div>
+          <div class="eyebrow">Workshop companion</div>
+          <h1 id="page-title">Build one agent workflow you can actually pilot.</h1>
+          <p class="lede">Use this page as a light guide, not a rigid form. Pick a real workflow, define the handoff, choose a practical platform path, and leave with a next step.</p>
+        </div>
+        <div class="hero-actions">
+          <a class="btn primary" href="#phases">Start the four phases</a>
+          <a class="btn" href="#downloads">Download scenario packs</a>
+        </div>
+      </div>
+
+      <aside class="panel hero-side" aria-label="Core idea">
+        <div>
+          <div class="eyebrow">Core idea</div>
+          <h2>Context + constraints = bounded agency</h2>
+          <p class="lede">Agents become useful when they have enough context to understand the work and enough constraints to act safely.</p>
+        </div>
+        <div class="equation" aria-label="Context plus constraints equals bounded agency">
+          <div class="equation-row">
+            <div class="eq-card">
+              <strong>Context</strong>
+              <span>Requests, policies, documents, history, systems</span>
+            </div>
+            <div class="operator">+</div>
+            <div class="eq-card">
+              <strong>Constraints</strong>
+              <span>Permissions, approvals, data boundaries, escalation rules</span>
+            </div>
+            <div class="operator">=</div>
+            <div class="eq-card">
+              <strong>Bounded agency</strong>
+              <span>Summarize, route, draft, recommend, prepare, trigger</span>
+            </div>
+          </div>
+        </div>
+        <div class="callout">The goal is not unlimited autonomy. The goal is bounded agency inside a workflow.</div>
+      </aside>
+    </section>
+
+    <section id="phases" class="section" aria-labelledby="phases-title">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Four phases</div>
+          <h2 id="phases-title">Move from idea to pilot path.</h2>
+        </div>
+        <p>These phases mirror the workshop sprints: navigate the problem, bound the handoff, map the platform path, and declare the next step.</p>
+      </div>
+
+      <div class="phase-grid">
+        <article class="phase-card">
+          <div>
+            <div class="phase-number">1</div>
+            <h3>Pick the workflow pain</h3>
+            <p>Start with the process where work gets stuck, repeated, routed, delayed, or re-explained.</p>
+          </div>
+          <ul class="prompt-list">
+            <li>Who is waiting?</li>
+            <li>Where does the handoff break?</li>
+            <li>What would improve in 30 days?</li>
+          </ul>
+        </article>
+
+        <article class="phase-card">
+          <div>
+            <div class="phase-number">2</div>
+            <h3>Design the handoff</h3>
+            <p>Define the route, role, and rules before choosing a tool or building an agent.</p>
+          </div>
+          <ul class="prompt-list">
+            <li>What starts the workflow?</li>
+            <li>What should the agent prepare?</li>
+            <li>Where does a person approve?</li>
+          </ul>
+        </article>
+
+        <article class="phase-card">
+          <div>
+            <div class="phase-number">3</div>
+            <h3>Map the platform path</h3>
+            <p>Choose the smallest practical starting point and the path to mature safely over time.</p>
+          </div>
+          <ul class="prompt-list">
+            <li>Explore with Copilot Chat</li>
+            <li>Scale team workflows with agents</li>
+            <li>Connect systems with Power Platform, Graph, Fabric, or Azure AI</li>
+          </ul>
+        </article>
+
+        <article class="phase-card">
+          <div>
+            <div class="phase-number">4</div>
+            <h3>Declare the pilot</h3>
+            <p>Leave with an owner, a pilot group, a data boundary, and a success measure.</p>
+          </div>
+          <ul class="prompt-list">
+            <li>Who owns the workflow?</li>
+            <li>What is the smallest useful version?</li>
+            <li>What follow-up is needed?</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section id="lanes" class="section" aria-labelledby="lanes-title">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Workflow lanes</div>
+          <h2 id="lanes-title">Choose the lane closest to the work.</h2>
+        </div>
+        <p>Do not worry about finding a perfect organizational match. Choose the lane where the workflow pain is clearest.</p>
+      </div>
+
+      <div class="guide-layout">
+        <div class="lane-list" role="tablist" aria-label="Workflow lanes">
+          <button class="lane-button active" type="button" data-lane="service">
+            <strong>Resident service & casework</strong>
+            <span>Intake, routing, missing info, responses</span>
+          </button>
+          <button class="lane-button" type="button" data-lane="legal">
+            <strong>Justice, legal & oversight</strong>
+            <span>Case prep, discovery, compliance, auditability</span>
+          </button>
+          <button class="lane-button" type="button" data-lane="field">
+            <strong>Field operations & assets</strong>
+            <span>Inspections, work orders, GIS, handoffs</span>
+          </button>
+          <button class="lane-button" type="button" data-lane="education">
+            <strong>Education & workforce support</strong>
+            <span>Students, faculty, staff, training, navigation</span>
+          </button>
+          <button class="lane-button" type="button" data-lane="health">
+            <strong>Health, research & risk</strong>
+            <span>Review packets, requirements, sensitive workflows</span>
+          </button>
+          <button class="lane-button" type="button" data-lane="platform">
+            <strong>AI governance & platform</strong>
+            <span>AI intake, security review, architecture, adoption</span>
+          </button>
+        </div>
+
+        <article class="lane-card" aria-live="polite">
+          <div class="eyebrow">Selected lane</div>
+          <h2 id="lane-title">Resident service & casework</h2>
+          <p id="lane-description" class="lede">Use this lane when the workflow involves requests, eligibility prep, missing information, routing, resident responses, or backlog reduction.</p>
+          <div id="lane-pills" class="lane-meta"></div>
+
+          <div class="builder" aria-label="Agent workflow builder prompts">
+            <div class="builder-field">
+              <label>Trigger</label>
+              <div id="field-trigger">A request, form, email, case, or service ticket arrives.</div>
+            </div>
+            <div class="builder-field">
+              <label>Agent role</label>
+              <div id="field-role">Summarize the request, identify missing information, recommend routing, and draft the handoff.</div>
+            </div>
+            <div class="builder-field">
+              <label>Human boundary</label>
+              <div id="field-boundary">Eligibility, enforcement, sensitive decisions, and final responses stay human-approved.</div>
+            </div>
+            <div class="builder-field">
+              <label>Pilot measure</label>
+              <div id="field-measure">Faster routing, fewer incomplete handoffs, reduced backlog, and more consistent responses.</div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="downloads" class="section" aria-labelledby="downloads-title">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Ready-start downloads</div>
+          <h2 id="downloads-title">Use a scenario pack instead of starting from a blank page.</h2>
+        </div>
+        <p>Each Word document is partially structured so teams can adapt it to their goals, systems, outcomes, processes, and approval boundaries.</p>
+      </div>
+
+      <div class="downloads">
+        <a class="download-card" href="assets/01%20-%20AI%20Use%20Case%20Intake%20and%20Governance%20Agent.docx" download>
+          <strong>AI Use Case Intake and Governance</strong>
+          <span>For AI portfolio intake, prioritization, governance gates, and pilot routing.</span>
+        </a>
+        <a class="download-card" href="assets/02%20-%20Public%20Service%20Intake%20and%20Routing%20Agent.docx" download>
+          <strong>Public Service Intake and Routing</strong>
+          <span>For resident requests, casework, triage, missing information, and handoffs.</span>
+        </a>
+        <a class="download-card" href="assets/03%20-%20Legal,%20Discovery,%20and%20Compliance%20Preparation%20Agent.docx" download>
+          <strong>Legal, Discovery, and Compliance Prep</strong>
+          <span>For case prep, discovery checklists, policy lookup, and governed review.</span>
+        </a>
+        <a class="download-card" href="assets/04%20-%20Student,%20Faculty,%20and%20Staff%20Support%20Agent.docx" download>
+          <strong>Student, Faculty, and Staff Support</strong>
+          <span>For advising, training, support navigation, library, and knowledge workflows.</span>
+        </a>
+        <a class="download-card" href="assets/05%20-%20IT,%20DevOps,%20Security,%20and%20Platform%20Operations%20Agent.docx" download>
+          <strong>IT, DevOps, Security, and Platform Ops</strong>
+          <span>For tickets, alerts, runbooks, incident prep, and platform operations.</span>
+        </a>
+        <a class="download-card" href="assets/06%20-%20Health,%20Research,%20and%20Risk%20Review%20Agent.docx" download>
+          <strong>Health, Research, and Risk Review</strong>
+          <span>For review packets, requirements, risk summaries, and regulated workflows.</span>
+        </a>
+        <a class="download-card" href="assets/07%20-%20GIS,%20Field%20Operations,%20and%20Asset%20Intelligence%20Agent.docx" download>
+          <strong>GIS, Field Operations, and Asset Intelligence</strong>
+          <span>For inspections, location context, asset history, and field handoffs.</span>
+        </a>
+        <a class="download-card" href="assets/08%20-%20Agent%20Scenario%20Worksheet.docx" download>
+          <strong>Agent Scenario Worksheet</strong>
+          <span>For teams that want one flexible canvas for any workflow lane.</span>
+        </a>
+      </div>
+    </section>
+
+    <section id="resources" class="section" aria-labelledby="resources-title">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Resources</div>
+          <h2 id="resources-title">Keep exploring after the room.</h2>
+        </div>
+        <p>Use these references to keep developing the workflow, role, and platform path after today.</p>
+      </div>
+
+      <div class="resources">
+        <a class="resource-card" href="assets/clawpilot-seller-skills-periodic-table.html">
+          <strong>Periodic table reference</strong>
+          <span>A visual way to think about capability patterns, skills, and reusable building blocks.</span>
+        </a>
+        <a class="resource-card" href="#downloads">
+          <strong>Scenario pack library</strong>
+          <span>Download the Word templates and adapt one to your workflow lane.</span>
+        </a>
+        <a class="resource-card" href="#phases">
+          <strong>Four-phase guide</strong>
+          <span>Return to the core sprint flow: workflow pain, handoff design, platform path, pilot next step.</span>
+        </a>
+        <a class="resource-card" href="https://learn.microsoft.com/microsoft-copilot-studio/" target="_blank" rel="noopener">
+          <strong>Copilot Studio documentation</strong>
+          <span>Explore how agents can be designed, tested, connected, governed, and published.</span>
+        </a>
+        <a class="resource-card" href="https://learn.microsoft.com/power-platform/" target="_blank" rel="noopener">
+          <strong>Power Platform documentation</strong>
+          <span>Explore automation, apps, Dataverse, connectors, approvals, and workflow orchestration.</span>
+        </a>
+        <a class="resource-card" href="https://learn.microsoft.com/azure/ai-services/" target="_blank" rel="noopener">
+          <strong>Azure AI services documentation</strong>
+          <span>Explore services for retrieval, language, search, grounding, and custom AI solutions.</span>
+        </a>
+      </div>
+
+      <p class="footer-note">Tip: if your organization spans multiple lanes, choose the workflow where the pain is clearest. The best first agent scenario is specific enough to pilot and important enough to matter.</p>
+    </section>
+  </main>
+
+  <script>
+    const lanes = {
+      service: {
+        title: "Resident service & casework",
+        description: "Use this lane when the workflow involves requests, eligibility prep, missing information, routing, resident responses, or backlog reduction.",
+        pills: ["intake", "routing", "missing information", "resident response", "backlog"],
+        trigger: "A request, form, email, case, or service ticket arrives.",
+        role: "Summarize the request, identify missing information, recommend routing, and draft the handoff.",
+        boundary: "Eligibility, enforcement, sensitive decisions, and final responses stay human-approved.",
+        measure: "Faster routing, fewer incomplete handoffs, reduced backlog, and more consistent responses."
+      },
+      legal: {
+        title: "Justice, legal & oversight",
+        description: "Use this lane when the workflow involves case prep, discovery, records review, policy lookup, compliance, auditability, or oversight.",
+        pills: ["case prep", "discovery", "records", "policy lookup", "auditability"],
+        trigger: "A matter, review request, document set, or compliance question needs preparation.",
+        role: "Retrieve approved materials, summarize context, prepare checklists, and draft review notes.",
+        boundary: "Legal judgment, disclosure decisions, filings, enforcement decisions, and strategy stay human-approved.",
+        measure: "Reduced prep time, more complete checklists, fewer missed steps, and clearer review handoffs."
+      },
+      field: {
+        title: "Field operations & assets",
+        description: "Use this lane when the workflow involves inspections, work orders, GIS/location context, asset history, routes, dispatch, or field handoffs.",
+        pills: ["inspections", "work orders", "GIS", "asset history", "field handoffs"],
+        trigger: "A location-based request, work order, inspection, or asset issue needs action.",
+        role: "Connect location, asset, request, inspection, and procedure context into a field-ready summary.",
+        boundary: "Dispatch priority, safety decisions, public commitments, and enforcement stay human-approved.",
+        measure: "Better routing, fewer repeat visits, faster inspection prep, and clearer field instructions."
+      },
+      education: {
+        title: "Education & workforce support",
+        description: "Use this lane when the workflow involves students, faculty, staff, advising, training, professional learning, libraries, or support navigation.",
+        pills: ["student support", "faculty support", "training", "advising", "knowledge navigation"],
+        trigger: "A student, faculty member, staff member, or learner needs guidance or support.",
+        role: "Retrieve approved guidance, personalize next steps by role, draft responses, and route/escalate when needed.",
+        boundary: "Academic decisions, accommodations, disciplinary matters, and official policy exceptions stay human-approved.",
+        measure: "Faster answers, reduced repetitive inquiries, improved support consistency, and clearer escalation."
+      },
+      health: {
+        title: "Health, research & risk",
+        description: "Use this lane when the workflow involves review packets, sensitive data, risk summaries, research/admin workflows, requirements, or regulated operations.",
+        pills: ["review packets", "risk", "requirements", "sensitive data", "regulated workflows"],
+        trigger: "A review request, risk question, research/admin task, or regulated workflow needs preparation.",
+        role: "Summarize requests, retrieve approved requirements, flag missing information, and prepare review packets.",
+        boundary: "Clinical, compliance, research approval, sensitive data-use, and external communication decisions stay human-approved.",
+        measure: "Faster review packet creation, fewer incomplete submissions, and more consistent requirement checks."
+      },
+      platform: {
+        title: "AI governance & platform",
+        description: "Use this lane when the workflow involves AI intake, prioritization, security review, architecture, platform path, or adoption governance.",
+        pills: ["AI intake", "security review", "architecture", "platform path", "governance"],
+        trigger: "An AI idea, automation request, platform question, or pilot proposal needs review.",
+        role: "Classify the idea, identify needed systems/data, flag governance questions, and recommend a platform path.",
+        boundary: "Funding, prioritization, data access, security approval, and policy decisions stay human-approved.",
+        measure: "More ideas become qualified pilots with an owner, outcome, data boundary, risk posture, and next step."
+      }
+    };
+
+    const buttons = Array.from(document.querySelectorAll(".lane-button"));
+    const title = document.getElementById("lane-title");
+    const description = document.getElementById("lane-description");
+    const pills = document.getElementById("lane-pills");
+    const trigger = document.getElementById("field-trigger");
+    const role = document.getElementById("field-role");
+    const boundary = document.getElementById("field-boundary");
+    const measure = document.getElementById("field-measure");
+
+    function renderLane(key) {
+      const lane = lanes[key];
+      title.textContent = lane.title;
+      description.textContent = lane.description;
+      pills.innerHTML = lane.pills.map((pill) => `<span class="pill">${pill}</span>`).join("");
+      trigger.textContent = lane.trigger;
+      role.textContent = lane.role;
+      boundary.textContent = lane.boundary;
+      measure.textContent = lane.measure;
+      buttons.forEach((button) => {
+        button.classList.toggle("active", button.dataset.lane === key);
+      });
+    }
+
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => renderLane(button.dataset.lane));
+    });
+
+    renderLane("service");
+  </script>
+</body>
+</html>
+

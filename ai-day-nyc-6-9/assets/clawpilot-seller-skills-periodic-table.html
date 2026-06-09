@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Periodic Table of Microsoft Seller Competencies</title>
+  <link rel="icon" href="data:,">
+  <script>
+    (() => {
+      const param = new URLSearchParams(window.location.search).get("clawpilotTheme");
+      const theme =
+        param || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      document.documentElement.setAttribute("data-theme", theme);
+    })();
+  </script>
+  <style>
+    :root {
+      color-scheme: light;
+      --cp-bg: #f7f4ef;
+      --cp-bg-elevated: #fcfbf8;
+      --cp-surface: #ffffff;
+      --cp-surface-soft: #f5f5f5;
+      --cp-border: #dedede;
+      --cp-border-strong: #919191;
+      --cp-text: #242424;
+      --cp-text-muted: #5c5c5c;
+      --cp-text-soft: #6f6f6f;
+      --cp-accent: #b11f4b;
+      --cp-accent-hover: #9a1a41;
+      --cp-accent-soft: rgba(177, 31, 75, 0.08);
+      --cp-accent-fg: #ffffff;
+      --cp-success: #16a34a;
+      --cp-danger: #dc2626;
+      --cp-warning: #f59e0b;
+      --cp-link: #0078d4;
+      --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.12);
+      --cp-overlay: rgba(255, 255, 255, 0.8);
+      --cp-panel: rgba(255, 255, 255, 0.86);
+      --cp-panel-strong: rgba(255, 255, 255, 0.96);
+      --cp-sheen: rgba(255, 255, 255, 0.55);
+      --cp-highlight: rgba(177, 31, 75, 0.12);
+    }
+    html[data-theme="dark"] {
+      color-scheme: dark;
+      --cp-bg: #3d3b3a;
+      --cp-bg-elevated: #343231;
+      --cp-surface: #292929;
+      --cp-surface-soft: #2e2e2e;
+      --cp-border: #474747;
+      --cp-border-strong: #5f5f5f;
+      --cp-text: #dedede;
+      --cp-text-muted: #919191;
+      --cp-text-soft: #b0b0b0;
+      --cp-accent: #fd8ea1;
+      --cp-accent-hover: #fb7b91;
+      --cp-accent-soft: rgba(253, 142, 161, 0.14);
+      --cp-accent-fg: #1a1a1a;
+      --cp-success: #4ade80;
+      --cp-danger: #f87171;
+      --cp-warning: #fbbf24;
+      --cp-link: #4da6ff;
+      --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.32);
+      --cp-overlay: rgba(41, 41, 41, 0.88);
+      --cp-panel: rgba(41, 41, 41, 0.72);
+      --cp-panel-strong: rgba(41, 41, 41, 0.96);
+      --cp-sheen: rgba(255, 255, 255, 0.04);
+      --cp-highlight: rgba(253, 142, 161, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--cp-bg);
+      color: var(--cp-text);
+      font-family: "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    button {
+      color: inherit;
+      font: inherit;
+    }
+
+    .app {
+      min-height: 100vh;
+      padding: 28px;
+    }
+
+    .shell {
+      max-width: 1860px;
+      margin: 0 auto;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(360px, 0.6fr);
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .panel,
+    .hero-main,
+    .detail-panel {
+      background: var(--cp-panel-strong);
+      border: 1px solid var(--cp-border);
+      border-radius: 16px;
+      box-shadow: 0 0 2px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.14);
+    }
+
+    .hero-main {
+      padding: 28px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-main::after {
+      content: "";
+      position: absolute;
+      right: 28px;
+      bottom: 24px;
+      width: 190px;
+      height: 124px;
+      border: 1px solid var(--cp-border);
+      border-radius: 16px;
+      background: var(--cp-accent-soft);
+      opacity: 0.7;
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      color: var(--cp-accent);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      margin: 0 0 12px;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      font-size: clamp(34px, 5vw, 68px);
+      letter-spacing: -0.06em;
+      line-height: 0.95;
+      margin: 0 0 16px;
+      max-width: 1060px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .lede {
+      color: var(--cp-text-muted);
+      font-size: 18px;
+      line-height: 1.55;
+      margin: 0;
+      max-width: 980px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-card {
+      padding: 20px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .hero-card h2,
+    .panel h2,
+    .detail-panel h2 {
+      font-size: 18px;
+      margin: 0;
+      letter-spacing: -0.02em;
+    }
+
+    .legend-list {
+      display: grid;
+      gap: 10px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .legend-list li {
+      background: var(--cp-surface);
+      border: 1px solid var(--cp-border);
+      border-radius: 0.625rem;
+      display: grid;
+      gap: 4px;
+      padding: 10px;
+    }
+
+    .legend-list strong {
+      font-size: 13px;
+    }
+
+    .legend-list span {
+      color: var(--cp-text-muted);
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 16px;
+      align-items: end;
+      margin-bottom: 20px;
+    }
+
+    .path-grid {
+      display: grid;
+      grid-template-columns: repeat(8, minmax(128px, 1fr));
+      gap: 10px;
+    }
+
+    .path-button,
+    .filter-chip,
+    .clear-button,
+    .group-header,
+    .period-label,
+    .tile,
+    .series-label {
+      background: var(--cp-surface);
+      border: 1px solid var(--cp-border);
+      border-radius: 0.625rem;
+      cursor: pointer;
+      transition: background 160ms ease, border-color 160ms ease, opacity 160ms ease, transform 160ms ease;
+    }
+
+    .path-button {
+      min-height: 82px;
+      padding: 11px;
+      text-align: left;
+    }
+
+    .path-button:hover,
+    .filter-chip:hover,
+    .clear-button:hover,
+    .group-header:hover,
+    .period-label:hover,
+    .tile:hover,
+    .series-label:hover {
+      border-color: var(--cp-accent);
+      transform: translateY(-1px);
+    }
+
+    .path-button.active,
+    .filter-chip.active,
+    .group-header.active,
+    .period-label.active,
+    .series-label.active {
+      background: var(--cp-accent-soft);
+      border-color: var(--cp-accent);
+    }
+
+    .path-button strong {
+      display: block;
+      font-size: 13px;
+      line-height: 1.2;
+      margin-bottom: 6px;
+    }
+
+    .path-button span {
+      color: var(--cp-text-muted);
+      display: block;
+      font-size: 12px;
+      line-height: 1.25;
+    }
+
+    .filter-stack {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+      max-width: 580px;
+    }
+
+    .filter-chip,
+    .clear-button {
+      font-size: 12px;
+      font-weight: 700;
+      padding: 8px 10px;
+    }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 380px;
+      gap: 20px;
+      align-items: start;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      padding: 16px;
+    }
+
+    .periodic-table {
+      display: grid;
+      grid-template-columns: 68px repeat(18, minmax(78px, 1fr));
+      grid-auto-rows: minmax(94px, auto);
+      gap: 6px;
+      min-width: 1610px;
+      align-items: stretch;
+    }
+
+    .group-header {
+      min-height: 86px;
+      padding: 8px;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 4px;
+    }
+
+    .group-number,
+    .tile-number {
+      color: var(--cp-text-soft);
+      font-family: Consolas, "Courier New", Courier, monospace;
+      font-size: 10px;
+      line-height: 1;
+    }
+
+    .group-title {
+      font-size: 11px;
+      font-weight: 800;
+      line-height: 1.05;
+    }
+
+    .group-subtitle {
+      color: var(--cp-text-muted);
+      font-size: 10px;
+      line-height: 1.15;
+    }
+
+    .period-label,
+    .series-label {
+      padding: 8px;
+      display: grid;
+      align-content: center;
+      gap: 4px;
+    }
+
+    .period-label strong,
+    .series-label strong {
+      font-size: 12px;
+      line-height: 1.1;
+    }
+
+    .period-label span,
+    .series-label span {
+      color: var(--cp-text-muted);
+      font-size: 10px;
+      line-height: 1.2;
+    }
+
+    .tile {
+      min-height: 94px;
+      padding: 7px;
+      display: grid;
+      grid-template-rows: auto auto auto 1fr auto;
+      gap: 4px;
+      overflow: hidden;
+      text-align: left;
+    }
+
+    .tile.selected {
+      outline: 2px solid var(--cp-accent);
+      outline-offset: 2px;
+    }
+
+    .tile.highlight {
+      background: var(--cp-accent-soft);
+      border-color: var(--cp-accent);
+    }
+
+    .tile.dimmed {
+      opacity: 0.32;
+    }
+
+    .tile-symbol {
+      font-size: 23px;
+      font-weight: 900;
+      letter-spacing: -0.05em;
+      line-height: 0.95;
+    }
+
+    .tile-name {
+      font-size: 10.5px;
+      font-weight: 800;
+      line-height: 1.05;
+    }
+
+    .tile-desc {
+      color: var(--cp-text-muted);
+      font-size: 9.5px;
+      line-height: 1.15;
+    }
+
+    .tile-meta {
+      color: var(--cp-text-soft);
+      display: flex;
+      gap: 4px;
+      justify-content: space-between;
+      font-size: 9px;
+      line-height: 1.1;
+    }
+
+    .tile-family {
+      border: 1px solid var(--cp-border);
+      border-radius: 999px;
+      padding: 1px 5px;
+      white-space: nowrap;
+    }
+
+    .series-label {
+      background: var(--cp-surface-soft);
+      grid-column: 1 / span 3;
+    }
+
+    .series-spacer {
+      min-height: 94px;
+    }
+
+    .placeholder {
+      align-items: center;
+      background: var(--cp-bg-elevated);
+      border-style: dashed;
+      display: grid;
+      justify-items: center;
+      text-align: center;
+    }
+
+    .placeholder .tile-symbol {
+      color: var(--cp-accent);
+      font-size: 18px;
+    }
+
+    .placeholder .tile-name {
+      color: var(--cp-text-muted);
+    }
+
+    .detail-panel {
+      display: grid;
+      gap: 16px;
+      padding: 20px;
+      position: sticky;
+      top: 20px;
+    }
+
+    .detail-title {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .detail-symbol {
+      width: 76px;
+      height: 76px;
+      background: var(--cp-accent-soft);
+      border: 1px solid var(--cp-accent);
+      border-radius: 16px;
+      color: var(--cp-accent);
+      display: grid;
+      font-size: 34px;
+      font-weight: 900;
+      letter-spacing: -0.05em;
+      place-items: center;
+    }
+
+    .detail-kicker {
+      color: var(--cp-text-muted);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .detail-title h2 {
+      font-size: 24px;
+      line-height: 1.05;
+      margin: 3px 0 0;
+    }
+
+    .detail-body {
+      color: var(--cp-text-muted);
+      font-size: 14px;
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    .detail-section {
+      border-top: 1px solid var(--cp-border);
+      display: grid;
+      gap: 8px;
+      padding-top: 14px;
+    }
+
+    .detail-section h3 {
+      color: var(--cp-text-soft);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      margin: 0;
+      text-transform: uppercase;
+    }
+
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .tag {
+      background: var(--cp-surface-soft);
+      border: 1px solid var(--cp-border);
+      border-radius: 999px;
+      color: var(--cp-text-muted);
+      font-size: 11px;
+      padding: 5px 8px;
+    }
+
+    .path-list {
+      display: grid;
+      gap: 8px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .path-list li {
+      background: var(--cp-surface);
+      border: 1px solid var(--cp-border);
+      border-radius: 0.625rem;
+      color: var(--cp-text-muted);
+      font-size: 12px;
+      line-height: 1.35;
+      padding: 9px;
+    }
+
+    .path-list strong {
+      color: var(--cp-text);
+    }
+
+    .notes {
+      display: grid;
+      gap: 16px;
+      margin-top: 20px;
+      padding: 20px;
+    }
+
+    .notes-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .note {
+      background: var(--cp-surface);
+      border: 1px solid var(--cp-border);
+      border-radius: 16px;
+      padding: 16px;
+    }
+
+    .note h3 {
+      font-size: 15px;
+      margin: 0 0 8px;
+    }
+
+    .note p {
+      color: var(--cp-text-muted);
+      font-size: 13px;
+      line-height: 1.45;
+      margin: 0;
+    }
+
+    @media (max-width: 1280px) {
+      .hero,
+      .controls,
+      .workspace {
+        grid-template-columns: 1fr;
+      }
+
+      .path-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+
+      .filter-stack {
+        justify-content: flex-start;
+        max-width: none;
+      }
+
+      .detail-panel {
+        position: static;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .app {
+        padding: 16px;
+      }
+
+      .hero-main,
+      .hero-card,
+      .detail-panel,
+      .notes {
+        padding: 16px;
+      }
+
+      .path-grid,
+      .notes-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <div class="shell">
+      <section class="hero">
+        <div class="hero-main">
+          <p class="eyebrow">ClawPilot for global Microsoft sellers</p>
+          <h1>Periodic Table of Seller Competencies</h1>
+          <p class="lede">A direct periodic-table emulation for healthy Microsoft business management. The 18 groups are seller competencies. The periods increase in complexity from fundamentals to governed autonomy. The separated series rows show the platform connectivity and trust controls required to make advanced agents real.</p>
+        </div>
+        <aside class="panel hero-card">
+          <h2>How to read it</h2>
+          <ul class="legend-list">
+            <li><strong>Groups 1-18</strong><span>Competencies sellers build across account planning, prospecting, deal craft, consumption, pipeline, partner motion, leadership, and business hygiene.</span></li>
+            <li><strong>Periods 1-7</strong><span>Increasing complexity: know the motion, prepare work, execute tasks, orchestrate the business, and eventually run governed autonomous loops.</span></li>
+            <li><strong>Series rows</strong><span>Connectivity and governance. Like lanthanides and actinides, they sit underneath because they enable the whole system rather than one selling motion.</span></li>
+            <li><strong>Paths</strong><span>Click a seller priority to highlight a route across competencies, complexity levels, connectors, and trust controls.</span></li>
+          </ul>
+        </aside>
+      </section>
+
+      <section class="controls">
+        <div>
+          <p class="eyebrow">Seller priority paths</p>
+          <div class="path-grid" id="pathGrid"></div>
+        </div>
+        <div class="filter-stack" id="filterStack"></div>
+      </section>
+
+      <section class="workspace">
+        <div class="panel table-wrap">
+          <div class="periodic-table" id="periodicTable"></div>
+        </div>
+        <aside class="detail-panel" id="detailPanel"></aside>
+      </section>
+
+      <section class="panel notes">
+        <h2>Why this works as a seller enablement system</h2>
+        <div class="notes-grid">
+          <article class="note">
+            <h3>The shape teaches progression</h3>
+            <p>Sellers can see that every competency has a path from basic fluency to advanced orchestration. It avoids positioning ClawPilot as a bag of prompts.</p>
+          </article>
+          <article class="note">
+            <h3>Gaps and series rows are meaningful</h3>
+            <p>The periodic layout creates space for prerequisites, platform dependencies, and governance. Advanced selling motions require MSX, Graph, Teams, Outlook, telemetry, and approval scaffolding.</p>
+          </article>
+          <article class="note">
+            <h3>It is broad enough for Microsoft sales</h3>
+            <p>The groups include account strategy, prospecting, solution narrative, deal craft, consumption planning, partner/co-sell, forecast, renewals, executive rhythm, and business hygiene.</p>
+          </article>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    const groups = [
+      { n: 1, id: "hygiene", title: "Business Hygiene", subtitle: "MSX, CRM, data quality" },
+      { n: 2, id: "account", title: "Account Strategy", subtitle: "Plans, priorities, context" },
+      { n: 3, id: "territory", title: "Territory Design", subtitle: "Coverage and whitespace" },
+      { n: 4, id: "prospecting", title: "Prospecting", subtitle: "Targeting and outreach" },
+      { n: 5, id: "stakeholder", title: "Stakeholders", subtitle: "Maps and influence" },
+      { n: 6, id: "relationship", title: "Relationships", subtitle: "Trust and sponsors" },
+      { n: 7, id: "discovery", title: "Discovery", subtitle: "Needs and qualification" },
+      { n: 8, id: "solution", title: "Solution Fit", subtitle: "Architecture and value" },
+      { n: 9, id: "narrative", title: "Customer Narrative", subtitle: "Story, proof, proposal" },
+      { n: 10, id: "deal", title: "Deal Crafting", subtitle: "Close plan and blockers" },
+      { n: 11, id: "commercial", title: "Commercials", subtitle: "Pricing, terms, ROI" },
+      { n: 12, id: "partners", title: "Partner Motion", subtitle: "Co-sell, SI, marketplace" },
+      { n: 13, id: "meeting", title: "Meeting System", subtitle: "Prep, run, recap" },
+      { n: 14, id: "pipeline", title: "Pipeline", subtitle: "Inspection and forecast" },
+      { n: 15, id: "consumption", title: "Consumption", subtitle: "Adoption and usage" },
+      { n: 16, id: "renewal", title: "Renewal & Expansion", subtitle: "Retention and growth" },
+      { n: 17, id: "leadership", title: "Leadership Rhythm", subtitle: "Updates and decisions" },
+      { n: 18, id: "learning", title: "Skill Growth", subtitle: "Coaching and enablement" }
+    ];
+
+    const periods = [
+      { n: 1, title: "Fluency", subtitle: "Know what good looks like" },
+      { n: 2, title: "Signal", subtitle: "Read context and diagnose" },
+      { n: 3, title: "Prepare", subtitle: "Create seller-ready work" },
+      { n: 4, title: "Execute", subtitle: "Complete approved tasks" },
+      { n: 5, title: "Orchestrate", subtitle: "Coordinate motions and owners" },
+      { n: 6, title: "Optimize", subtitle: "Run loops with exceptions" },
+      { n: 7, title: "Autonomous", subtitle: "Governed operating systems" }
+    ];
+
+    const series = [
+      { id: "connectivity", title: "Connectivity Series", subtitle: "System access, data, and execution connectors" },
+      { id: "governance", title: "Governance Series", subtitle: "Trust, privacy, controls, and scale" }
+    ];
+
+    const mainLayout = [
+      { period: 1, placements: [[1, "Hf"], [18, "Ss"]] },
+      { period: 2, placements: [[1, "Mx"], [2, "Ap"], [13, "Mp"], [14, "Pi"], [15, "Ca"], [16, "Rx"], [17, "Eu"], [18, "Sc"]] },
+      { period: 3, placements: [[1, "Qh"], [2, "Ab"], [13, "Ag"], [14, "Fn"], [15, "Cu"], [16, "Rg"], [17, "Br"], [18, "Lc"]] },
+      { period: 4, placements: [[1, "Su"], [2, "Ci"], [3, "Td"], [4, "Or"], [5, "St"], [6, "Re"], [7, "Di"], [8, "Wk"], [9, "Nb"], [10, "Cb"], [11, "Pr"], [12, "Pk"], [13, "Fm"], [14, "Fc"], [15, "Ux"], [16, "Ra"], [17, "Le"], [18, "Co"]] },
+      { period: 5, placements: [[1, "Hg"], [2, "Ao"], [3, "Ws"], [4, "Ps"], [5, "Ch"], [6, "No"], [7, "Dm"], [8, "So"], [9, "Pn"], [10, "Dp"], [11, "Ro"], [12, "Cr"], [13, "Mo"], [14, "Po"], [15, "Cp"], [16, "Ex"], [17, "Er"], [18, "Ct"]] },
+      { period: 6, placements: [[1, "Ho"], [2, "Os"], [3, "Ce"], [4, "Bo"], [5, "Io"], [6, "Se"], [7, "Qo"], [8, "Vo"], [9, "Ko"], [10, "Do"], [11, "Lo"], [12, "Go"], [13, "Oo"], [14, "Fo"], [15, "Au"], [16, "Rew"], [17, "Loa"], [18, "Ea"]] },
+      { period: 7, placements: [[1, "Ha"], [2, "Aa"], [3, "Ba"], [4, "Pa"], [5, "Sa"], [6, "Na"], [7, "Da"], [8, "Va"], [9, "Ya"], [10, "Cl"], [11, "Cm"], [12, "Pa2"], [13, "Ma"], [14, "Fa"], [15, "Cs"], [16, "Ga"], [17, "La"], [18, "Sa2"]] }
+    ];
+
+    const elements = [
+      ["Hf", 1, "Hygiene Fluency", "Business Hygiene", "Knows MSX fields, stage rules, close dates, and hygiene expectations.", ["MSX read", "Sales process"], ["CRM basics", "data discipline"]],
+      ["Ss", 2, "Seller Skill Scout", "Skill Growth", "Identifies priority competencies and recommended ClawPilot learning path.", ["Learning catalog"], ["self-assessment", "enablement"]],
+      ["Mx", 3, "MSX Signal Reader", "Business Hygiene", "Finds stale records, missing next steps, and weak opportunity evidence.", ["MSX read"], ["inspection", "data quality"]],
+      ["Ap", 4, "Account Pulse", "Account Strategy", "Summarizes account context, priorities, open asks, and recent signals.", ["M365 Graph", "CRM read"], ["account planning", "signal reading"]],
+      ["Mp", 5, "Meeting Pulse", "Meeting System", "Highlights upcoming meetings, attendees, objectives, and prep gaps.", ["Calendar", "Teams"], ["meeting readiness"]],
+      ["Pi", 6, "Pipeline Indicator", "Pipeline", "Reads pipeline health, age, coverage, and forecast evidence.", ["MSX read", "Power BI"], ["forecast literacy"]],
+      ["Ca", 7, "Consumption Awareness", "Consumption", "Explains usage, adoption blockers, and consumption patterns.", ["Usage telemetry"], ["adoption literacy"]],
+      ["Rx", 8, "Renewal X-Ray", "Renewal & Expansion", "Surfaces renewal dates, risk signals, expansion indicators, and owners.", ["CRM read", "Renewal data"], ["retention", "growth"]],
+      ["Eu", 9, "Exec Update Coach", "Leadership Rhythm", "Frames what changed, why it matters, and what decision is needed.", ["M365 context"], ["executive communication"]],
+      ["Sc", 10, "Skill Coach", "Skill Growth", "Explains the next selling muscle to build and how to practice it.", ["Learning catalog"], ["coaching"]],
+      ["Qh", 11, "Quality Hygiene Agent", "Business Hygiene", "Builds a prioritized CRM cleanup plan with exact missing fields.", ["MSX read"], ["CRM hygiene", "prioritization"]],
+      ["Ab", 12, "Account Brief Builder", "Account Strategy", "Creates a customer brief with stakeholders, activity, risks, and next move.", ["M365 Graph", "CRM read"], ["briefing", "account planning"]],
+      ["Ag", 13, "Agenda Builder", "Meeting System", "Drafts agenda, talk track, questions, and desired decisions.", ["Calendar", "Loop"], ["facilitation"]],
+      ["Fn", 14, "Forecast Narrative", "Pipeline", "Creates a clean forecast story with evidence, risk, and assumptions.", ["MSX read"], ["forecast narrative"]],
+      ["Cu", 15, "Consumption Plan", "Consumption", "Builds adoption plan, usage blockers, owners, and expansion hypothesis.", ["Usage telemetry", "CRM read"], ["consumption planning"]],
+      ["Rg", 16, "Renewal Growth Brief", "Renewal & Expansion", "Prepares renewal posture, risks, commercial path, and expansion themes.", ["CRM read", "Renewal data"], ["renewal planning"]],
+      ["Br", 17, "Business Review Pack", "Leadership Rhythm", "Creates leadership-ready review narrative, risks, asks, and decisions.", ["CRM read", "PowerPoint optional"], ["business reviews"]],
+      ["Lc", 18, "Learning Capsule", "Skill Growth", "Builds a short practice exercise around a seller competency.", ["Learning catalog"], ["enablement design"]],
+      ["Su", 19, "System Update Agent", "Business Hygiene", "Applies approved CRM field and next-step updates with traceability.", ["MSX MCP write"], ["system execution"]],
+      ["Ci", 20, "Context Ingest", "Account Strategy", "Writes approved account notes, contacts, and source-linked insights.", ["CRM write", "SharePoint"], ["knowledge capture"]],
+      ["Td", 21, "Territory Designer", "Territory Design", "Segments accounts, whitespace, industry themes, and coverage priorities.", ["CRM read", "Territory data"], ["territory planning"]],
+      ["Or", 22, "Outreach Runner", "Prospecting", "Creates approved drafts, call tasks, sequence reminders, and CRM tasks.", ["Outlook", "To Do", "CRM tasks"], ["cadence execution"]],
+      ["St", 23, "Stakeholder Mapper", "Stakeholders", "Maps champions, blockers, economic buyers, technical owners, and gaps.", ["CRM contacts", "M365 Graph"], ["influence planning"]],
+      ["Re", 24, "Relationship Engine", "Relationships", "Creates thank-yous, re-engagement notes, touch plans, and care reminders.", ["Outlook drafts", "Calendar"], ["relationship cadence"]],
+      ["Di", 25, "Discovery Interpreter", "Discovery", "Turns notes into pains, requirements, qualification, and open questions.", ["Teams", "CRM notes"], ["discovery", "qualification"]],
+      ["Wk", 26, "Workshop Kit", "Solution Fit", "Builds workshop agenda, assets, demos, and follow-up actions.", ["Loop", "PowerPoint", "SharePoint"], ["solution selling"]],
+      ["Nb", 27, "Narrative Builder", "Customer Narrative", "Creates customer story, proposal frame, and proof-point outline.", ["SharePoint", "Sales plays"], ["storytelling"]],
+      ["Cb", 28, "Close Blocker Agent", "Deal Crafting", "Tracks blockers, owners, dates, escalations, and close-path actions.", ["CRM write", "Outlook drafts"], ["deal execution"]],
+      ["Pr", 29, "Pricing Readiness", "Commercials", "Prepares ROI, commercial questions, pricing dependencies, and approvals.", ["Pricing tools", "CRM read"], ["commercial acumen"]],
+      ["Pk", 30, "Partner Kit", "Partner Motion", "Drafts partner brief, co-sell ask, joint value points, and next steps.", ["Partner Center", "CRM read"], ["co-sell messaging"]],
+      ["Fm", 31, "Follow-up Manager", "Meeting System", "Turns meetings into recaps, tasks, owners, and CRM notes.", ["Teams", "Outlook", "CRM write"], ["follow-through"]],
+      ["Fc", 32, "Forecast Commit", "Pipeline", "Updates approved forecast notes and manager-ready commit rationale.", ["MSX MCP write"], ["forecast execution"]],
+      ["Ux", 33, "Usage Expansion", "Consumption", "Creates adoption tasks, stakeholder nudges, and expansion motions.", ["Usage telemetry", "Outlook drafts"], ["usage-led growth"]],
+      ["Ra", 34, "Renewal Action", "Renewal & Expansion", "Creates renewal tasks, exec alignment drafts, and risk mitigation steps.", ["CRM write", "Outlook drafts"], ["renewal execution"]],
+      ["Le", 35, "Leadership Escalation", "Leadership Rhythm", "Drafts and routes approved leadership asks with concise context.", ["Outlook drafts", "Teams"], ["escalation framing"]],
+      ["Co", 36, "Competency Operator", "Skill Growth", "Schedules practice loops and recommends next seller enablement modules.", ["Calendar", "Learning"], ["skill practice"]],
+      ["Hg", 37, "Hygiene Autopilot", "Business Hygiene", "Runs recurring CRM hygiene checks and queues exceptions.", ["MSX MCP", "Audit"], ["operational discipline"]],
+      ["Ao", 38, "Account OS", "Account Strategy", "Maintains living account memory and prompts next-best account actions.", ["CRM", "M365 Graph", "SharePoint"], ["account orchestration"]],
+      ["Ws", 39, "Whitespace Scout", "Territory Design", "Monitors accounts for whitespace, triggers, and segment plays.", ["CRM", "Sales plays"], ["opportunity creation"]],
+      ["Ps", 40, "Prospecting System", "Prospecting", "Runs signal-based prospecting queues and drafts seller-reviewed outreach.", ["CRM", "M365 Graph", "Outlook"], ["pipeline creation"]],
+      ["Ch", 41, "Champion Builder", "Stakeholders", "Maintains champion plan, proof needs, mutual value, and access gaps.", ["CRM contacts"], ["champion development"]],
+      ["No", 42, "Network Orchestrator", "Relationships", "Runs relationship radar across customers, partners, and internal allies.", ["M365 Graph", "CRM"], ["network strategy"]],
+      ["Dm", 43, "Discovery Manager", "Discovery", "Maintains discovery themes, requirements, gaps, and qualification history.", ["Teams", "CRM"], ["needs analysis"]],
+      ["So", 44, "Solution Motion OS", "Solution Fit", "Coordinates solution narrative, demo path, proof, and technical alignment.", ["SharePoint", "Loop", "Sales plays"], ["solution orchestration"]],
+      ["Pn", 45, "Proposal Navigator", "Customer Narrative", "Maintains proposals, business case, references, and proof-point library.", ["SharePoint", "Word"], ["proposal strategy"]],
+      ["Dp", 46, "Deal Plan OS", "Deal Crafting", "Maintains mutual plan, blockers, owners, dates, and exec asks.", ["CRM", "Outlook", "Teams"], ["close governance"]],
+      ["Ro", 47, "ROI Orchestrator", "Commercials", "Maintains ROI story, commercial risk, approvals, and negotiation prep.", ["Pricing tools", "CRM"], ["business value"]],
+      ["Cr", 48, "Co-sell Registration", "Partner Motion", "Prepares approved partner registration and co-sell actions.", ["Partner Center", "CRM write"], ["partner operations"]],
+      ["Mo", 49, "Meeting Orchestrator", "Meeting System", "Maintains prep, agendas, recaps, and open commitments.", ["Calendar", "Teams", "CRM"], ["meeting operations"]],
+      ["Po", 50, "Pipeline Operator", "Pipeline", "Runs weekly inspection loops and prompts forecast decisions.", ["MSX MCP", "Power BI"], ["pipeline operations"]],
+      ["Cp", 51, "Consumption Program", "Consumption", "Maintains adoption backlog, blockers, owners, and value realization.", ["Usage telemetry", "CSM tools"], ["customer success"]],
+      ["Ex", 52, "Expansion Radar", "Renewal & Expansion", "Detects expansion signals, risk reversal, and land-and-expand paths.", ["Usage telemetry", "CRM"], ["expansion planning"]],
+      ["Er", 53, "Executive Rhythm", "Leadership Rhythm", "Maintains operating rhythm, review cadence, risks, and decisions.", ["Teams", "CRM", "M365 Graph"], ["business management"]],
+      ["Ct", 54, "Coach Tutor", "Skill Growth", "Coaches seller behavior from completed work and manager feedback.", ["Learning", "Manager notes"], ["coaching loop"]],
+      ["Ho", 55, "Hygiene Optimizer", "Business Hygiene", "Suggests automation rules for low-risk CRM upkeep and exception queues.", ["MSX MCP", "Audit"], ["process optimization"]],
+      ["Os", 56, "Opportunity System", "Account Strategy", "Connects account plan, opportunities, stakeholders, and consumption into one system.", ["CRM", "Graph", "Usage"], ["opportunity orchestration"]],
+      ["Ce", 57, "Coverage Engine", "Territory Design", "Balances coverage, whitespace, strategic accounts, and capacity.", ["Territory data", "CRM"], ["coverage optimization"]],
+      ["Bo", 58, "Buying Signal OS", "Prospecting", "Monitors events, relationships, campaigns, and triggers for next actions.", ["Graph", "CRM", "Campaigns"], ["signal orchestration"]],
+      ["Io", 59, "Influence Optimizer", "Stakeholders", "Optimizes stakeholder coverage, missing roles, and influence sequence.", ["CRM contacts", "Graph"], ["influence architecture"]],
+      ["Se", 60, "Sponsor Engine", "Relationships", "Maintains sponsor plan, exec access, and mutual-value moments.", ["CRM", "Calendar"], ["sponsor management"]],
+      ["Qo", 61, "Qualification OS", "Discovery", "Runs qualification health, exit criteria, and decision-process clarity.", ["CRM", "Teams"], ["qualification governance"]],
+      ["Vo", 62, "Value Optimizer", "Solution Fit", "Optimizes solution path to pains, architecture, outcomes, and proof.", ["Sales plays", "Docs"], ["value engineering"]],
+      ["Ko", 63, "Knowledge Orchestrator", "Customer Narrative", "Maintains account proof library, win themes, and narrative consistency.", ["SharePoint", "OneDrive"], ["knowledge reuse"]],
+      ["Do", 64, "Deal Orchestrator", "Deal Crafting", "Coordinates deal team, close plan, blockers, and escalation path.", ["CRM", "Teams"], ["deal command"]],
+      ["Lo", 65, "Licensing Optimizer", "Commercials", "Optimizes licensing path, procurement sequence, and commercial approvals.", ["Pricing", "Contracts"], ["commercial strategy"]],
+      ["Go", 66, "Go-to-Market Partner OS", "Partner Motion", "Maintains partner motions, marketplace routes, and co-sell evidence.", ["Partner Center", "CRM"], ["ecosystem selling"]],
+      ["Oo", 67, "Operating Cadence", "Meeting System", "Optimizes meetings, prep, recaps, and task closure across account teams.", ["Calendar", "Teams"], ["operating rhythm"]],
+      ["Fo", 68, "Forecast Optimizer", "Pipeline", "Optimizes coverage, risk, commit posture, and inspection narrative.", ["MSX", "Power BI"], ["forecast governance"]],
+      ["Au", 69, "Adoption Optimizer", "Consumption", "Optimizes usage blockers, stakeholder enablement, and value realization.", ["Usage telemetry"], ["adoption optimization"]],
+      ["Rew", 70, "Renewal Workbench", "Renewal & Expansion", "Runs renewal and expansion workback plans with risk exceptions.", ["CRM", "Renewal data"], ["renewal orchestration"]],
+      ["Loa", 71, "Leader Operating Agent", "Leadership Rhythm", "Keeps leader-ready briefs, risks, asks, and decisions current.", ["CRM", "M365 Graph"], ["leadership operations"]],
+      ["Ea", 72, "Enablement Advisor", "Skill Growth", "Finds skill gaps by motion and recommends personalized practice.", ["Learning", "Telemetry"], ["personalized enablement"]],
+      ["Ha", 73, "Hygiene Autonomous", "Business Hygiene", "Executes governed low-risk hygiene loops and escalates exceptions.", ["MSX MCP", "Audit", "Policy"], ["autonomous hygiene"]],
+      ["Aa", 74, "Account Autonomous", "Account Strategy", "Runs account sensing, planning nudges, and next-best actions.", ["CRM", "Graph", "SharePoint"], ["account autopilot"]],
+      ["Ba", 75, "Business Allocation", "Territory Design", "Rebalances attention across territory health, whitespace, and risk.", ["CRM", "Telemetry"], ["territory autopilot"]],
+      ["Pa", 76, "Prospecting Autonomous", "Prospecting", "Queues campaigns and drafts outreach from governed signal rules.", ["CRM", "Graph", "Outlook"], ["prospecting autopilot"]],
+      ["Sa", 77, "Stakeholder Autonomous", "Stakeholders", "Maintains stakeholder map and prompts coverage actions.", ["CRM", "Graph"], ["stakeholder autopilot"]],
+      ["Na", 78, "Network Autonomous", "Relationships", "Runs relationship health sensing and private seller nudges.", ["Graph", "Calendar"], ["relationship autopilot"]],
+      ["Da", 79, "Discovery Autonomous", "Discovery", "Keeps discovery gaps, qualification, and open questions current.", ["Teams", "CRM"], ["discovery autopilot"]],
+      ["Va", 80, "Value Autonomous", "Solution Fit", "Maintains solution fit, value hypotheses, and proof gaps.", ["Sales plays", "Docs"], ["solution autopilot"]],
+      ["Ya", 81, "Story Autonomous", "Customer Narrative", "Maintains customer narrative, proof, proposal themes, and claims.", ["SharePoint", "Word"], ["narrative autopilot"]],
+      ["Cl", 82, "Close Autonomous", "Deal Crafting", "Runs close-plan sensing, blocker routing, and exception escalation.", ["CRM", "Teams"], ["close autopilot"]],
+      ["Cm", 83, "Commercial Autonomous", "Commercials", "Monitors approvals, procurement path, ROI risk, and commercial blockers.", ["Pricing", "CRM"], ["commercial autopilot"]],
+      ["Pa2", 84, "Partner Autonomous", "Partner Motion", "Runs co-sell motion, partner next steps, and marketplace route checks.", ["Partner Center", "CRM"], ["partner autopilot"]],
+      ["Ma", 85, "Meeting Autonomous", "Meeting System", "Runs prep, recap, commitment capture, and task routing by policy.", ["Calendar", "Teams", "CRM"], ["meeting autopilot"]],
+      ["Fa", 86, "Forecast Autonomous", "Pipeline", "Maintains forecast evidence, coverage, risks, and commit exceptions.", ["MSX MCP", "Power BI"], ["forecast autopilot"]],
+      ["Cs", 87, "Consumption Autonomous", "Consumption", "Runs adoption, consumption, blocker, and expansion exception loops.", ["Usage telemetry", "CRM"], ["consumption autopilot"]],
+      ["Ga", 88, "Growth Autonomous", "Renewal & Expansion", "Runs renewal risk, expansion paths, and stakeholder prompts.", ["CRM", "Usage"], ["growth autopilot"]],
+      ["La", 89, "Leadership Autonomous", "Leadership Rhythm", "Maintains leadership rhythm, summaries, decisions, and escalations.", ["CRM", "Teams", "Graph"], ["leadership autopilot"]],
+      ["Sa2", 90, "Skill Autonomous", "Skill Growth", "Runs personalized skill development loops from seller work patterns.", ["Learning", "Telemetry"], ["skill autopilot"]]
+    ];
+
+    const connectivity = [
+      ["Mc", 91, "MSX MCP", "System connector", "Read/write opportunity, forecast, notes, tasks, and hygiene updates.", ["MSX MCP", "RBAC"], ["CRM execution"]],
+      ["Gr", 92, "M365 Graph", "System connector", "Calendar, email, Teams, files, people, and organizational context.", ["Graph", "Consent"], ["work context"]],
+      ["Ou", 93, "Outlook Layer", "System connector", "Drafts, replies, follow-ups, approvals, and send gates.", ["Outlook", "To Do"], ["seller communication"]],
+      ["Tm", 94, "Teams Layer", "System connector", "Meetings, chats, recaps, commitments, and collaboration threads.", ["Teams", "Transcripts"], ["collaboration memory"]],
+      ["Sp", 95, "SharePoint Knowledge", "System connector", "Customer docs, proposal assets, proof points, and team memory.", ["SharePoint", "OneDrive"], ["knowledge retrieval"]],
+      ["Lp", 96, "Loop Workspace", "System connector", "Living plans, pursuit rooms, account pages, and meeting workspaces.", ["Loop", "Teams"], ["collaborative planning"]],
+      ["Pc", 97, "Partner Center", "System connector", "Co-sell, marketplace, partner registration, and joint motions.", ["Partner Center"], ["partner operations"]],
+      ["Ut", 98, "Usage Telemetry", "System connector", "Adoption, consumption, workload health, blockers, and expansion signals.", ["Product telemetry"], ["usage intelligence"]],
+      ["Prt", 99, "Pricing Tools", "System connector", "Pricing, licensing, approvals, offers, and procurement dependencies.", ["Pricing", "Contracts"], ["commercial operations"]],
+      ["Pw", 100, "Power BI", "System connector", "Pipeline, forecast, consumption, territory, and business dashboards.", ["Power BI"], ["business analytics"]],
+      ["Mk", 101, "Marketing Signals", "System connector", "Campaign engagement, intent, events, and audience segmentation.", ["Campaign systems"], ["demand generation"]],
+      ["Vr", 102, "Viva & Learning", "System connector", "Role-based learning, coaching, practice, and knowledge reinforcement.", ["Viva", "Learning"], ["enablement"]],
+      ["Id", 103, "Identity", "System connector", "Seller identity, delegated access, scopes, and role-based permissioning.", ["Entra ID", "RBAC"], ["secure access"]],
+      ["Sr", 104, "Source Registry", "System connector", "Grounding references, source links, confidence, and retrieval provenance.", ["Search", "Index"], ["grounding"]],
+      ["Api", 105, "Workflow APIs", "System connector", "Approvals, tasks, notifications, queues, and event-driven automation.", ["Workflow", "Events"], ["automation plumbing"]]
+    ];
+
+    const governance = [
+      ["Apv", 106, "Approval Gates", "Trust control", "Human confirmation before external messages or system writes.", ["Policy", "UX"], ["human-in-loop"]],
+      ["Aud", 107, "Audit Trail", "Trust control", "Before-and-after records, source links, actor, timestamp, and rationale.", ["Audit", "Telemetry"], ["traceability"]],
+      ["Db", 108, "Data Boundary", "Trust control", "Prevents customer, partner, tenant, and segment data leakage.", ["MIP", "DLP"], ["data protection"]],
+      ["Pg", 109, "Privacy Guard", "Trust control", "Protects personal calendar, email, relationship, and behavioral signals.", ["Graph scopes", "Policy"], ["seller privacy"]],
+      ["Cf", 110, "Confidence Flags", "Trust control", "Confidence, uncertainty, citations, and what the agent does not know.", ["Evaluation", "Grounding"], ["quality control"]],
+      ["Rv", 111, "Regional Variance", "Trust control", "Local process, language, regulatory, and selling-motion differences.", ["Policy packs"], ["localization"]],
+      ["Erg", 112, "Exception Routing", "Trust control", "Escalates ambiguity, risk, high-impact decisions, and policy conflicts.", ["Teams", "Workflow"], ["risk routing"]],
+      ["Rai", 113, "Responsible AI", "Trust control", "Safety checks, fairness review, protected class avoidance, and policy fit.", ["RAI", "Compliance"], ["safe AI"]],
+      ["Mv", 114, "Manager View", "Trust control", "Aggregated coaching and outcomes without exposing private seller content.", ["Analytics", "Privacy"], ["manager enablement"]],
+      ["Cg", 115, "Customer Gate", "Trust control", "Checks what can be shared externally and with partners.", ["MIP", "DLP"], ["external sharing"]],
+      ["Rt", 116, "Runbook Telemetry", "Trust control", "Tracks adoption, impact, bottlenecks, and skill maturity.", ["Telemetry", "Dashboards"], ["measurement"]],
+      ["Eval", 117, "Evaluation Harness", "Trust control", "Tests prompts, tools, writes, outcomes, regressions, and safety.", ["Evals", "Test data"], ["quality assurance"]],
+      ["Pol", 118, "Policy Packs", "Trust control", "Role, segment, geo, customer, and system-specific policy bundles.", ["Policy", "RBAC"], ["governed rollout"]],
+      ["Hn", 119, "Handoff Rules", "Trust control", "Defines when the agent stops and routes to seller, manager, partner, or specialist.", ["Workflow"], ["decision rights"]],
+      ["Scl", 120, "Scale Controls", "Trust control", "Rollout rings, admin settings, throttles, and failure containment.", ["Admin", "Telemetry"], ["enterprise scale"]]
+    ];
+
+    const allItems = [...elements, ...connectivity, ...governance].map(([sym, n, name, family, desc, systems, skills]) => ({
+      sym, n, name, family, desc, systems, skills
+    }));
+
+    const itemBySymbol = new Map(allItems.map((item) => [item.sym, item]));
+    const groupByTitle = new Map(groups.map((group) => [group.title, group]));
+
+    const paths = [
+      { id: "healthy-business", title: "Run a healthy business", desc: "MSX, pipeline, forecast, consumption, renewal, leader rhythm.", symbols: ["Hf", "Mx", "Qh", "Su", "Hg", "Po", "Fo", "Cs", "La", "Mc", "Aud", "Rt"] },
+      { id: "create-pipeline", title: "Create new pipeline", desc: "Territory, whitespace, prospecting, narrative, meetings.", symbols: ["Td", "Ws", "Ps", "Bo", "Or", "Nb", "Mp", "Mo", "Ou", "Mk", "Apv"] },
+      { id: "craft-deal", title: "Craft and close a deal", desc: "Discovery, stakeholders, solution fit, commercials, blockers.", symbols: ["Di", "St", "Wk", "Vo", "Cb", "Dp", "Do", "Pr", "Ro", "Cl", "Erg", "Aud"] },
+      { id: "plan-consumption", title: "Plan consumption", desc: "Adoption, success planning, usage, blockers, expansion.", symbols: ["Ca", "Cu", "Ux", "Cp", "Au", "Cs", "Ex", "Ga", "Ut", "Cf", "Cg"] },
+      { id: "renew-expand", title: "Renew and expand", desc: "Renewal risk, retention, ROI, expansion, exec alignment.", symbols: ["Rx", "Rg", "Ra", "Rew", "Ex", "Ga", "Cm", "Loa", "Prt", "Pg", "Hn"] },
+      { id: "exec-meeting", title: "Prepare exec meeting", desc: "Brief, agenda, narrative, asks, follow-up, leadership rhythm.", symbols: ["Ap", "Ab", "Ag", "Eu", "Br", "Fm", "Le", "Er", "La", "Gr", "Db"] },
+      { id: "partner-motion", title: "Build partner motion", desc: "Co-sell path, partner kit, registration, GTM, marketplace.", symbols: ["Pk", "Cr", "Go", "Pa2", "Pc", "Cg", "Pol"] },
+      { id: "skill-growth", title: "Grow seller skills", desc: "Assess, practice, coach, personalize, scale enablement.", symbols: ["Ss", "Sc", "Lc", "Co", "Ct", "Ea", "Sa2", "Vr", "Eval", "Mv"] }
+    ];
+
+    let activePath = "healthy-business";
+    let activeGroup = null;
+    let activePeriod = null;
+    let selectedSymbol = "Hf";
+
+    const table = document.getElementById("periodicTable");
+    const pathGrid = document.getElementById("pathGrid");
+    const filterStack = document.getElementById("filterStack");
+    const detailPanel = document.getElementById("detailPanel");
+
+    function renderPaths() {
+      pathGrid.innerHTML = paths.map((path) => `
+        <button class="path-button ${path.id === activePath ? "active" : ""}" data-path="${path.id}">
+          <strong>${path.title}</strong>
+          <span>${path.desc}</span>
+        </button>
+      `).join("");
+    }
+
+    function renderFilters() {
+      filterStack.innerHTML = `
+        <button class="clear-button" data-clear="all">Reset view</button>
+        ${periods.map((period) => `<button class="filter-chip ${activePeriod === period.n ? "active" : ""}" data-period="${period.n}">P${period.n}: ${period.title}</button>`).join("")}
+      `;
+    }
+
+    function classesFor(item, context = {}) {
+      const path = paths.find((entry) => entry.id === activePath);
+      const highlighted = path && path.symbols.includes(item.sym);
+      const group = groupByTitle.get(item.family);
+      const groupMatch = !activeGroup || (group && group.n === activeGroup) || item.family === "System connector" || item.family === "Trust control";
+      const periodMatch = !activePeriod || context.period === activePeriod || item.family === "System connector" || item.family === "Trust control";
+      const dimmed = !groupMatch || !periodMatch || (path && !highlighted && !activeGroup && !activePeriod);
+      return [
+        selectedSymbol === item.sym ? "selected" : "",
+        highlighted ? "highlight" : "",
+        dimmed ? "dimmed" : ""
+      ].filter(Boolean).join(" ");
+    }
+
+    function renderTable() {
+      table.innerHTML = "";
+      table.appendChild(cell("div", "series-spacer", "", { gridColumn: "1", gridRow: "1" }));
+
+      groups.forEach((group) => {
+        const node = document.createElement("button");
+        node.className = `group-header ${activeGroup === group.n ? "active" : ""}`;
+        node.dataset.group = group.n;
+        node.style.gridColumn = String(group.n + 1);
+        node.style.gridRow = "1";
+        node.innerHTML = `<span class="group-number">${group.n}</span><span class="group-title">${group.title}</span><span class="group-subtitle">${group.subtitle}</span>`;
+        table.appendChild(node);
+      });
+
+      periods.forEach((period) => {
+        const node = document.createElement("button");
+        node.className = `period-label ${activePeriod === period.n ? "active" : ""}`;
+        node.dataset.period = period.n;
+        node.style.gridColumn = "1";
+        node.style.gridRow = String(period.n + 1);
+        node.innerHTML = `<strong>P${period.n} · ${period.title}</strong><span>${period.subtitle}</span>`;
+        table.appendChild(node);
+      });
+
+      mainLayout.forEach((row) => {
+        row.placements.forEach(([groupNumber, symbol]) => {
+          const item = itemBySymbol.get(symbol);
+          const node = tile(item, { period: row.period, group: groupNumber });
+          node.style.gridColumn = String(groupNumber + 1);
+          node.style.gridRow = String(row.period + 1);
+          table.appendChild(node);
+        });
+      });
+
+      const period6Placeholder = placeholder("57-71", "Connectivity");
+      period6Placeholder.style.gridColumn = "4";
+      period6Placeholder.style.gridRow = "7";
+      table.appendChild(period6Placeholder);
+
+      const period7Placeholder = placeholder("89-103", "Governance");
+      period7Placeholder.style.gridColumn = "4";
+      period7Placeholder.style.gridRow = "8";
+      table.appendChild(period7Placeholder);
+
+      renderSeries(series[0], connectivity, 9);
+      renderSeries(series[1], governance, 10);
+    }
+
+    function renderSeries(definition, items, row) {
+      const label = document.createElement("button");
+      label.className = "series-label";
+      label.dataset.series = definition.id;
+      label.style.gridColumn = "1 / span 3";
+      label.style.gridRow = String(row);
+      label.innerHTML = `<strong>${definition.title}</strong><span>${definition.subtitle}</span>`;
+      table.appendChild(label);
+
+      items.forEach((item, index) => {
+        const node = tile(item, { series: definition.id });
+        node.style.gridColumn = String(index + 4);
+        node.style.gridRow = String(row);
+        table.appendChild(node);
+      });
+    }
+
+    function tile(item, context) {
+      const node = document.createElement("button");
+      node.className = `tile ${classesFor(item, context)}`;
+      node.dataset.symbol = item.sym;
+      node.innerHTML = `
+        <span class="tile-number">${item.n}</span>
+        <span class="tile-symbol">${item.sym}</span>
+        <span class="tile-name">${item.name}</span>
+        <span class="tile-desc">${item.desc}</span>
+        <span class="tile-meta"><span>${item.family}</span><span class="tile-family">${context.period ? `P${context.period}` : "Series"}</span></span>
+      `;
+      return node;
+    }
+
+    function placeholder(symbol, label) {
+      const node = document.createElement("button");
+      node.className = "tile placeholder";
+      node.dataset.series = label.toLowerCase();
+      node.innerHTML = `<span class="tile-symbol">${symbol}</span><span class="tile-name">${label} series below</span>`;
+      return node;
+    }
+
+    function cell(tag, className, html, style = {}) {
+      const node = document.createElement(tag);
+      node.className = className;
+      node.innerHTML = html;
+      Object.assign(node.style, style);
+      return node;
+    }
+
+    function renderDetail() {
+      const item = itemBySymbol.get(selectedSymbol) || itemBySymbol.get("Hf");
+      const group = groupByTitle.get(item.family);
+      const path = paths.find((entry) => entry.id === activePath);
+      const pathItems = path.symbols.map((symbol) => itemBySymbol.get(symbol)).filter(Boolean);
+      detailPanel.innerHTML = `
+        <div class="detail-title">
+          <div class="detail-symbol">${item.sym}</div>
+          <div>
+            <div class="detail-kicker">${item.n} · ${group ? `Group ${group.n}` : item.family}</div>
+            <h2>${item.name}</h2>
+          </div>
+        </div>
+        <p class="detail-body">${item.desc}</p>
+        <div class="detail-section">
+          <h3>Competency</h3>
+          <div class="tag-list">
+            <span class="tag">${item.family}</span>
+            ${group ? `<span class="tag">${group.subtitle}</span>` : ""}
+          </div>
+        </div>
+        <div class="detail-section">
+          <h3>Seller skills built</h3>
+          <div class="tag-list">${item.skills.map((skill) => `<span class="tag">${skill}</span>`).join("")}</div>
+        </div>
+        <div class="detail-section">
+          <h3>Connectivity needed</h3>
+          <div class="tag-list">${item.systems.map((system) => `<span class="tag">${system}</span>`).join("")}</div>
+        </div>
+        <div class="detail-section">
+          <h3>Current priority path: ${path.title}</h3>
+          <ul class="path-list">
+            ${pathItems.map((entry, index) => `<li><strong>${index + 1}. ${entry.sym} · ${entry.name}</strong><br>${entry.desc}</li>`).join("")}
+          </ul>
+        </div>
+      `;
+    }
+
+    function rerender() {
+      renderPaths();
+      renderFilters();
+      renderTable();
+      renderDetail();
+    }
+
+    document.addEventListener("click", (event) => {
+      const pathButton = event.target.closest("[data-path]");
+      const groupButton = event.target.closest("[data-group]");
+      const periodButton = event.target.closest("[data-period]");
+      const symbolButton = event.target.closest("[data-symbol]");
+      const clearButton = event.target.closest("[data-clear]");
+
+      if (pathButton) {
+        activePath = pathButton.dataset.path;
+        selectedSymbol = paths.find((entry) => entry.id === activePath).symbols[0];
+        activeGroup = null;
+        activePeriod = null;
+        rerender();
+        return;
+      }
+
+      if (clearButton) {
+        activePath = "healthy-business";
+        activeGroup = null;
+        activePeriod = null;
+        selectedSymbol = "Hf";
+        rerender();
+        return;
+      }
+
+      if (groupButton) {
+        const group = Number(groupButton.dataset.group);
+        activeGroup = activeGroup === group ? null : group;
+        rerender();
+        return;
+      }
+
+      if (periodButton) {
+        const period = Number(periodButton.dataset.period);
+        activePeriod = activePeriod === period ? null : period;
+        rerender();
+        return;
+      }
+
+      if (symbolButton) {
+        selectedSymbol = symbolButton.dataset.symbol;
+        rerender();
+      }
+    });
+
+    rerender();
+  </script>
+</body>
+</html>
