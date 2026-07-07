@@ -1,16 +1,16 @@
 # AI Days
 
-Standalone GitHub Pages site for AI Day event guides.
+Standalone GitHub Pages site for reusable AI Day workshop guides.
 
 ## Events
 
-- [AI Day Malvern 6-26](ai-day-malvern-6-26/index.html)
+- [Industry AI Days](industry-ai-days/index.html)
 
 ## Structure
 
-Each AI Day should live in its own top-level folder so events stay separate and reusable:
+Each reusable guide should live in its own top-level folder so workshop paths stay separate and reusable:
 
 ```text
-ai-day-malvern-6-26/
+industry-ai-days/
   index.html
 ```
